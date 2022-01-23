@@ -1,0 +1,74 @@
+﻿@model CityViewModel
+
+<div>
+    <h4>Add city and Assign to Country</h4>
+
+    <div>
+        <P id="actionMessage">@ViewBag.Mess</P>
+    </div>
+
+    <div class="flexwrap">
+
+        <div>
+            <fieldset id="fieldsetbox">
+                <legend id="legbox">Filter list by search</legend>
+                <form asp-action="Index" method="post" role="form">
+                    @Html.AntiForgeryToken()
+                    <label asp-for="FilterString"></label>
+                    <br />
+                    <input asp-for="FilterString" required />
+                    <br />
+                    <br />
+                    <input type="submit" class="btn btn-primary" name="btnFilter" value="Search" />
+                    <input type="button" class="btn btn-secondary" name="btnReset" value="Reset Search" onClick="location.href='@Url.Action("Index", "City")'" />
+                </form>
+                <p>@Model.SearchResultEmpty</p>
+                <br />
+                <br />
+
+            </fieldset>
+        </div>
+
+
+        <div>
+            <fieldset id="fieldsetbox">
+                <legend id="legbox">Add City & Assign to Country</legend>
+                <form asp-action="CreateCity" method="post" role="form">
+                    @Html.AntiForgeryToken()
+                    <div>
+                        <label asp-for="CityName"></label>
+                        <br />
+                        <input asp-for="CityName" />
+                        <br />
+                        <span id="redtext" asp-validation-for="CityName"></span>
+                        <br />
+                        <label asp-for="Country"></label>
+                        <br />
+                        <select asp-for="Country">
+                            <option value="" disabled>Select a Country</option>
+                            @{
+                                if (Model.CountryListView != null)
+                                {
+                                    foreach (Country country in Model.CountryListView)
+                                    {
+                                        <option value="@country.CountryId">@country.CountryName</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <input type="submit" class="btn btn-primary" name="btnCreate" value="Add City" />
+                    </div>
+                </form>
+            </fieldset>
+        </div>
+
+    </div> <!-- end flexdiv -->
+
+    <br />
+    <div>
+        @{ <partial name="_CityListPartial" model="Model" />}
+    </div>
+
+</div>

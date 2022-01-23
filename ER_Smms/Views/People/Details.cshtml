@@ -1,0 +1,39 @@
+﻿@model Person
+
+<div>
+    <h4>Person Details</h4>
+
+    <div class="flexwrap">
+
+        <div>
+            <div>
+                <div><b>PersonId:</b> @Model.PersonId</div>
+                <div><b>Name:</b> @Model.PersonName</div>
+                <div><b>PhoneNumber:</b> @Model.PersonPhoneNumber</div>
+                <div><b>City:</b> @Model.City.CityName</div>
+                <div><b>Country:</b> @Model.City.Country.CountryName</div>
+                <div>
+                    <b>Languages:</b>
+                    <div class="border-1">
+@*                        @{
+                            if (Model.PersonLanguages != null)
+                            {
+                                foreach (PersonLanguage language in Model.PersonLanguages)
+                                { <div>@language.Language.LanguageName</div> }
+                        }
+                                        }*@
+                    </div>
+
+                </div>
+
+                <br />
+                <input type="button" class="btn btn-secondary" name="btnReset" value="<-- Go Back to PeopleList" onClick="location.href='@Url.Action("Index", "People")'" />
+            </div>
+
+
+        </div>
+
+
+    </div> <!-- end flexdiv -->
+
+</div>

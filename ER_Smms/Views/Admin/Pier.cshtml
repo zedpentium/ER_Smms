@@ -1,0 +1,71 @@
+﻿@model PierViewModel
+
+<partial name="_HarbourTopMenu" />
+
+<div id="adminpierss">
+    <h4>Hantera Bryggor</h4>
+    <br />
+    
+<div class="table-container">
+    <div class="row bg-dark text-light">
+        <div class="col-1">Databas_Id</div>
+        <div class="col-3">Namn</div>
+        <div class="col-3">Info</div>
+        <div class="col-3">Hamn</div>
+        <div class="col-2">Alternativ</div>
+    </div>
+
+        @if (Model.PierListView != null)
+        {
+            @foreach (Pier pier in Model.PierListView)
+            {
+                <div class="row" id="viewlisttable">
+                    <div class="col-1">@pier.Id</div>
+                    <div class="col-3">@pier.Label</div>
+                    <div class="col-3">@pier.Info</div>
+                    <div class="col-3">
+                        @if (pier.Harbour != null)
+                        {
+                            @pier.Harbour.Label
+                        }
+                    </div>
+                    <div class="col-2" id="btnBorderBox">
+
+                        <div class="form-sidebyside"> @* Container for buttons *@
+                            <div class="row">
+
+                        <div class="col">
+                            <form asp-action="EditPier" asp-route-id="@pier.Id" method="post" role="form">
+                                @Html.AntiForgeryToken()
+                                <input type="submit" id="optionBtnGreen" value="Editera">
+                            </form>
+                        </div>
+
+                        @if (User.IsInRole("SuperAdmin"))
+                         {
+                        <div class="col">
+                            <form asp-action="DeletePier" asp-route-id="@pier.Id" method="post" role="form" onclick="return confirm('Är du säker på att du vill radera denna Brygga?')">
+                                @Html.AntiForgeryToken()
+                                <input type="submit" id="optionBtnRed" value="Radera">
+                            </form>
+                        </div>
+                         }
+
+                            </div> @* ROW *@
+                        </div> @* Container for buttons *@
+
+                        <div class="form-sidebyside-floatclear"></div>
+                    </div> @* BorderButton Box *@
+
+                </div> @* viewTabel *@
+            }
+
+        }
+
+
+</div>
+
+
+
+</div>
+                

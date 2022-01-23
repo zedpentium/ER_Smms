@@ -1,0 +1,62 @@
+﻿@model CreatePierViewModel
+
+<div id="adminpiers">
+@*    <h4>Skapa ny Hamn</h4>*@
+
+    
+
+ <div>
+                <form class="createeditforms" asp-action="EditPierSave" method="post" role="form">
+                    <fieldset id="fieldsetcreateharbour">
+                    <legend id="legendcreateharbour">Editera Brygga (ID: @Model.Id):</legend>
+                        @Html.AntiForgeryToken()
+
+                        <input asp-for="Id" hidden />
+                        <label asp-for="Label"></label>
+                        <br />
+                        <input asp-for="Label" />
+                        <br />
+                        <br />
+                        <label asp-for="Info"></label>
+                        <br />
+                        <textarea asp-for="Info"  rows="5" cols="40"></textarea>
+                        <br />
+                        <br />
+                        <label asp-for="HarbourId"></label>
+                        <br />
+                        <select asp-for="HarbourId"> @*asp-items="Html.GetEnumSelectList<HarbourListView>()">*@
+                            <option value="" disabled selected>Välj Hamn</option>
+                            @{
+                                if (Model.HarbourListView != null)
+                                {
+                                    foreach (Harbour harbour in Model.HarbourListView)
+                                    {
+                                        if (@harbour.Id == Model.HarbourId)
+                                        {
+                                            <option value="@harbour.Id" selected>@harbour.Label</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@harbour.Id">@harbour.Label</option>
+                                        }
+                                    }
+                                }
+
+                            }
+                        </select>
+                        <br />
+                        <br />
+                        <input type="submit" class="btn btn-primary btnWidthSeparate" name="btnFilter" value="Spara" />
+                        <input type="button" class="btn btn-secondary btnWidthSeparate" name="btnBack" value="Tillbaka" onClick="location.href='@Url.Action("Pier", "Admin")'" />
+                    </fieldset>
+                </form>
+
+        </div>
+
+
+   
+
+
+
+</div>
+                

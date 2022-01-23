@@ -1,0 +1,32 @@
+﻿@model PersonLanguageViewModel
+
+<div>
+    <h4>Add Language to Person</h4>
+    <div class="flexwrap">
+
+        <div>
+            <fieldset id="fieldsetbox">
+                <legend id="legbox">Add Language to @Model.Person.PersonName</legend>
+                <form asp-action="AddLanguageToPerson" method="post" role="form">
+                    @Html.AntiForgeryToken()
+                    <div>
+                        <input asp-for="PersonId" value="@Model.Person.PersonId" readonly="readonly" />
+                        <br />
+                        <label asp-for="SelectedListBoxView">Choose Language(s)</label>
+                        <br />
+                        @Html.ListBoxFor(m => m.SelectedListBoxView, Model.LanguageSelectList, new { size = 7 })
+                        <br />
+                    </div>
+                    <div>
+                        <input type="submit" class="btn btn-primary" name="btnCreate" value="Save" />
+                    </div>
+                </form>
+            </fieldset>
+            <br />
+            <input type="button" class="btn btn-secondary" name="btnReset" value="<-- Go Back to PeopleList" onClick="location.href='@Url.Action("Index", "People")'" />
+        </div>
+
+    </div> <!-- end flexdiv -->
+
+
+</div>

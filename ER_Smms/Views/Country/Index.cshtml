@@ -1,0 +1,60 @@
+﻿@model CountryViewModel
+
+<div>
+    <h4>Add & Edit Country</h4>
+
+    <div>
+        <P id="actionMessage">@ViewBag.Mess</P>
+    </div>
+
+    <div class="flexwrap">
+
+        <div>
+            <fieldset id="fieldsetbox">
+                <legend id="legbox">Filter list by search</legend>
+                <form asp-action="Index" method="post" role="form">
+                    @Html.AntiForgeryToken()
+                    <label asp-for="FilterString"></label>
+                    <br />
+                    <input asp-for="FilterString" required />
+                    <br />
+                    <br />
+                    <input type="submit" class="btn btn-primary" name="btnFilter" value="Search" />
+                    <input type="button" class="btn btn-secondary" name="btnReset" value="Reset Search" onClick="location.href='@Url.Action("Index", "Country")'" />
+                </form>
+                <p>@Model.SearchResultEmpty</p>
+                <br />
+                <br />
+
+            </fieldset>
+        </div>
+
+
+        <div>
+            <fieldset id="fieldsetbox">
+                <legend id="legbox">Add Country</legend>
+                <form asp-action="CreateCountry" method="post" role="form">
+                    @Html.AntiForgeryToken()
+                    <div>
+                        <label asp-for="CountryName"></label>
+                        <br />
+                        <input asp-for="CountryName" />
+                        <br />
+                        <span id="redtext" asp-validation-for="CountryName"></span>
+                        <br />
+                    </div>
+                    <div>
+                        <input type="submit" class="btn btn-primary" name="btnCreate" value="Add Country" />
+                    </div>
+                </form>
+            </fieldset>
+        </div>
+
+    </div> <!-- end flexdiv -->
+
+    <br />
+    <div>
+        @{ <partial name="_CountryListPartial" model="Model" />}
+    </div>
+
+</div>

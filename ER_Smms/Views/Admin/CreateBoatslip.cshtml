@@ -1,0 +1,47 @@
+﻿@model CreateBoatslipViewModel
+
+<div id="adminboatslip">
+@*    <h4>Skapa ny Hamn</h4>*@
+
+    
+
+ <div>
+                <form asp-action="CreatePier" method="post" role="form">
+                    <fieldset id="fieldsetcreateharbour">
+                    <legend id="legendcreateharbour">Skapa ny Båtplats:</legend>
+                        @Html.AntiForgeryToken()
+                        <label asp-for="Label"></label>
+                        <br />
+                        <input asp-for="Label" required />
+
+
+                        <br /><br />
+                        <label asp-for="PierId"></label>
+                        <br />
+                        <select asp-for="PierId">
+                            <option value="" disabled>Välj Hamn</option>
+                            @{
+                                    if (Model.PierListView != null)
+                                    {
+                                        foreach (Pier pier in Model.PierListView)
+                                        {
+                                            <option value="@pier.Id">@pier.Label</option>
+                                        }
+                                    }
+                            }
+                        </select>
+                        <br />
+                        <br />
+                        <input type="submit" class="btn btn-primary" name="btnFilter" value="Skapa" />
+                    </fieldset>
+                </form>
+
+        </div>
+
+
+   
+
+
+
+</div>
+                

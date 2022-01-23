@@ -1,0 +1,51 @@
+﻿@model CreatePierViewModel
+
+<div id="adminpiers">
+@*    <h4>Skapa ny Hamn</h4>*@
+
+    
+
+ <div>
+                <form class="createeditforms" asp-action="CreatePier" method="post" role="form">
+                    <fieldset id="fieldsetcreateharbour">
+                    <legend id="legendcreateharbour">Skapa ny Brygga:</legend>
+                        @Html.AntiForgeryToken()
+                        <label asp-for="Label"></label>
+                        <br />
+                        <input asp-for="Label" required />
+                        <br />
+                        <br />
+                        <label asp-for="Info"></label>
+                        <br />
+                        <textarea asp-for="Info"  rows="5" cols="40" required></textarea>
+                        <br />
+                        <br />
+                        <label asp-for="HarbourId"></label>
+                        <br />
+                        <select asp-for="HarbourId">
+                            <option value="" disabled selected>Välj Hamn</option>
+                            @{
+                                    if (Model.HarbourListView != null)
+                                    {
+                                        foreach (Harbour harbour in Model.HarbourListView)
+                                        {
+                                            <option value="@harbour.Id">@harbour.Label</option>
+                                        }
+                                    }
+                            }
+                        </select>
+                        <br />
+                        <br />
+                        <input type="submit" class="btn btn-primary" name="btnFilter" value="Skapa" />
+                    </fieldset>
+                </form>
+
+        </div>
+
+
+   
+
+
+
+</div>
+                

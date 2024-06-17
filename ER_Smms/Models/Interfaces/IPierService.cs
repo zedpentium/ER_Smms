@@ -1,24 +1,18 @@
-﻿using ER_Smms.Models.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ER_Smms.Models.Interfaces
 {
     public interface IPierService
     {
-        string Create(CreatePierViewModel viewModel, Harbour selectedObj);
+        Task Create(Pier obj);
 
-        PierViewModel ReadAll();
+        Task<List<Pier>> ReadAll();
 
-        //PierViewModel FindBy(PierViewModel findbymodel);
+        Task<Pier> FindBy(int id);
 
-        Pier FindBy(int id);
+        Task Update(Pier obj);
 
-        string Update(Pier obj);
-
-        bool Remove(int id);
-
+        Task Remove(int id);
     }
 }

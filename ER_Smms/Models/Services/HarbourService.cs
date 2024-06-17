@@ -1,65 +1,44 @@
-﻿using System;
+﻿using ER_Smms.Models.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using ER_Smms.Models.Interfaces;
-using ER_Smms.Models.ViewModels;
-using ER_Smms.Models;
 
 namespace ER_Smms.Models.Services
 {
     public class HarbourService : IHarbourService
     {
-        private readonly IHarbourRepo _harbourRepo;
+        private readonly IHarbourRepo _repo;
 
-        public HarbourService(IHarbourRepo harbourRepo)
+        public HarbourService(IHarbourRepo repo)
         {
-            _harbourRepo = harbourRepo;
+            _repo = repo;
+        }
+
+        public async Task Create(Harbour obj)
+        {
+            await _repo.Create(obj);
         }
 
 
-        public string Create(CreateHarbourViewModel viewModel)
+        public async Task<List<Harbour>> ReadAll()
         {
-            Harbour remapViewToObj = new Harbour()
-            { Label = viewModel.Label, Info = viewModel.Info };
-                
-            string createHarbourResultMessage = _harbourRepo.Create(remapViewToObj);
-
-            return createHarbourResultMessage;
+            return await _repo.ReadAll();
         }
 
-        public HarbourViewModel ReadAll()
-        {
-            HarbourViewModel harbourViewMod = new HarbourViewModel() { HarbourListView = _harbourRepo.ReadAll() };
 
-            return harbourViewMod;
+        public async Task Update(Harbour obj)
+        {
+            await _repo.Update(obj);
         }
 
-        public string Update(Harbour harbour)
-        {
-            string updateHarbourResultMessage = _harbourRepo.Update(harbour);
 
-            return updateHarbourResultMessage;
+        public async Task<Harbour> FindBy(int id)
+        {
+            return await _repo.Read(id);
         }
 
-        //public HarbourViewModel FindBy(HarbourViewModel search)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public Harbour FindBy(int id)
+        public async Task Remove(int id)
         {
-            Harbour foundHarbour = _harbourRepo.Read(id);
-
-            return foundHarbour;
-        }
-
-        public bool Remove(int id)
-        {
-            Harbour harbourToDelete = _harbourRepo.Read(id);
-            bool success = _harbourRepo.Delete(harbourToDelete);
-
-            return success;
+            await _repo.Delete(await _repo.Read(id));
         }
 
     }

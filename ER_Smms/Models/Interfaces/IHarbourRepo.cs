@@ -1,25 +1,18 @@
-﻿using ER_Smms.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ER_Smms.Models.Interfaces
 {
     public interface IHarbourRepo
     {
-        string Create(Harbour obj);
+        Task Create(Harbour obj);
 
+        Task<List<Harbour>> ReadAll();
 
-        List<Harbour> ReadAll();
+        Task<Harbour> Read(int id);
 
+        Task Update(Harbour obj);
 
-        Harbour Read(int id);
-
-
-        string Update(Harbour obj);
-
-
-        bool Delete(Harbour obj);
+        Task Delete(Harbour obj);
     }
 }

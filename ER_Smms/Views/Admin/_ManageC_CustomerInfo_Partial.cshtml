@@ -1,0 +1,64 @@
+﻿<div class="col-12">
+
+<div class="row">
+    <h6>Kund-Uppgifter</h6>
+    <br />
+    <br />
+    </div>
+
+<div class="border border-6 bg-secondary border-primary rounded-3 p-1">
+    <div class="row">
+        <div class="fixedcolcustomerinfolabels">
+            FörNamn:  <br />
+            EfterNamn: <br />
+            Adress: <br />
+            PostNummer: <br />
+            Stad: <br />
+            Telefon: <br />
+            Epost: <br /><br />
+            Login: <br />
+        </div>
+
+        <div class="col">
+            <b>
+                @Model.CustomerAllInfo.FirstName <br />
+                @Model.CustomerAllInfo.LastName  <br />
+                @Model.CustomerAllInfo.Address  <br />
+                @Model.CustomerAllInfo.Postcode  <br />
+                @Model.CustomerAllInfo.City  <br />
+                @Model.CustomerAllInfo.PhoneNumber  <br />
+                @Model.CustomerAllInfo.Email  <br /><br />
+                @Model.CustomerAllInfo.UserName  <br />
+            </b> <br />
+        </div>
+    </div>
+</div> @* End Col-12 *@
+
+<br /><br />
+
+<div id="managecustomerbuttons">
+    <input type="button" class="btn btn-secondary btnWidthSeparate"
+                name="btnBack" value="Editera Kunduppgifter"
+                onclick="editCustomer_PartialView('@Model.CustomerAllInfo.UserName');" />
+
+@*    <form asp-controller="Identity" asp-action="EditCustomer" asp-route-id="@Model.CustomerAllInfo.UserName"
+          method="post" role="form">
+
+        @Html.AntiForgeryToken()
+        <input type="submit" id="optionBtnGreen" value="Editera Kunduppgifter">
+    </form>*@
+</div>
+</div> @* End styled borderframe *@
+
+<br />
+
+@*<div>
+    <input type="button" class="btn btn-secondary btnWidthSeparate"
+           name="btnBack" value="Tillbaka"
+           onClick="location.href='@Url.Action("Customer", "Admin")'" />
+</div>*@
+
+
+
+
+

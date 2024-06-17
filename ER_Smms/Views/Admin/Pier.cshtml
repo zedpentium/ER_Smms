@@ -5,12 +5,14 @@
 <div id="adminpierss">
     <h4>Hantera Bryggor</h4>
     <br />
+
+    <partial name="_ToastHandlerPartial" />
     
 <div class="table-container">
     <div class="row bg-dark text-light">
-        <div class="col-1">Databas_Id</div>
+@*        <div class="col-1">Id</div>*@
         <div class="col-3">Namn</div>
-        <div class="col-3">Info</div>
+        <div class="col-4">Info</div>
         <div class="col-3">Hamn</div>
         <div class="col-2">Alternativ</div>
     </div>
@@ -20,10 +22,10 @@
             @foreach (Pier pier in Model.PierListView)
             {
                 <div class="row" id="viewlisttable">
-                    <div class="col-1">@pier.Id</div>
-                    <div class="col-3">@pier.Label</div>
-                    <div class="col-3">@pier.Info</div>
-                    <div class="col-3">
+@*                    <div class="col-1">@pier.Id</div>*@
+                    <div class="col-3 text-wrap text-break">@pier.Label</div>
+                    <div class="col-4 text-wrap text-break">@pier.Info</div>
+                    <div class="col-3 text-wrap text-break">
                         @if (pier.Harbour != null)
                         {
                             @pier.Harbour.Label
@@ -35,7 +37,9 @@
                             <div class="row">
 
                         <div class="col">
-                            <form asp-action="EditPier" asp-route-id="@pier.Id" method="post" role="form">
+                            <form asp-action="EditPier" asp-route-id="@pier.Id"
+                            method="post" role="form">
+
                                 @Html.AntiForgeryToken()
                                 <input type="submit" id="optionBtnGreen" value="Editera">
                             </form>
@@ -44,7 +48,10 @@
                         @if (User.IsInRole("SuperAdmin"))
                          {
                         <div class="col">
-                            <form asp-action="DeletePier" asp-route-id="@pier.Id" method="post" role="form" onclick="return confirm('Är du säker på att du vill radera denna Brygga?')">
+                            <form asp-action="DeletePier" asp-route-id="@pier.Id"
+                            method="post" role="form"
+                            onclick="return confirm('Är du säker på att du vill radera denna Brygga?')">
+
                                 @Html.AntiForgeryToken()
                                 <input type="submit" id="optionBtnRed" value="Radera">
                             </form>
@@ -57,7 +64,7 @@
                         <div class="form-sidebyside-floatclear"></div>
                     </div> @* BorderButton Box *@
 
-                </div> @* viewTabel *@
+                </div> @* viewTable *@
             }
 
         }

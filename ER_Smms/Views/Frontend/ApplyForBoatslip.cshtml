@@ -1,0 +1,92 @@
+﻿@model ApplyForBoatslipViewModel
+
+
+
+<div>
+    <h4>Båtplats ansökan</h4>
+
+    <p>För att vi skall kunna se om det finns en passande båtplats för din båt,<br />
+    så behöver vi lite uppgifter om din båt.</p>
+    <p>Och info om dig, Namn, Epost och eller TelefonNummer för att kunna kontakta dig.</p>
+
+
+
+<form class="createeditforms" asp-action="ApplyForBoatslipSave" method="post" role="form">
+                    @Html.AntiForgeryToken()
+            <fieldset class="form-group-frontend">
+                <legend>Info om din Båt:</legend>
+
+                <br />
+
+                <label asp-for="Length"></label>
+                <input asp-for="Length" />
+                <br />
+                <span id="redtext" asp-validation-for="Length"></span>
+                <br />
+                <label asp-for="Width"></label>
+                <input asp-for="Width" />
+                <br />
+                <span id="redtext" asp-validation-for="Width"></span>
+                <br />
+                <label asp-for="Depth"></label>
+                <input asp-for="Depth" />
+                <br />
+                <span id="redtext" asp-validation-for="Depth"></span>
+                <br />
+
+                <label asp-for="BrandModel"></label>
+                <input asp-for="BrandModel" />
+                <br />
+
+                <legend>KontaktInfo om dig:</legend>
+
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" />
+                <br />
+                <span id="redtext" asp-validation-for="FirstName"></span>
+                <br />
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" />
+                <br />
+                <span id="redtext" asp-validation-for="LastName"></span>
+                <br />
+                <label asp-for="Email"></label>
+                <input asp-for="Email" />
+                <br />
+                <span id="redtext" asp-validation-for="Email"></span>
+                <br />
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" />
+                <br />
+                <span id="redtext" asp-validation-for="PhoneNumber"></span>
+                <br />
+                <br />
+                <p>* Fält som Krävs</p>
+                <label asp-for="ExtraInfoTextarea"></label>
+                <textarea asp-for="ExtraInfoTextarea"></textarea>
+                <br />
+                <span id="redtext" asp-validation-for="ExtraInfoTextarea"></span>
+                <br />
+                    <script>
+                    // Replace the <textarea id="editor1"> with a CKEditor 4
+                    // instance, using default configuration.
+                    CKEDITOR.replace( 'ExtraInfoTextarea' );
+                    </script>
+                
+
+                <input type="submit" class="btn btn-primary"
+                name="btnFilter" value="Skicka Ansökan" />
+                <input type="button" class="btn btn-secondary btnWidthSeparate"
+                name="btnBack" value="Avbryt"
+                onClick="location.href='@Url.Action("Welcome", "Frontend")'" />
+            </fieldset>
+
+
+        </form>
+
+
+
+
+
+</div>
+                

@@ -1,31 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using ER_Smms.Models.ViewModels;
+//using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 
 namespace ER_Smms.Models
 {
-    public class Harbour
+    public class Harbour : DateCreatedEdited
     {
-        //private string _personName;
-        //private string _personPhoneNumber;
+        //public Harbour()
+        //{ }
 
-        public Harbour()
-        { }
-
-        public Harbour(string label, string info)
-        {
-            Label = label;
-            Info = info;
-        }
-
-        //public Harbour(CreateHarbourViewModel createHarbourViewModel)
+        //public Harbour(string label, string info)
         //{
         //    Label = label;
         //    Info = info;
         //}
-        
-
 
         public int Id { get; set; }
 
@@ -35,10 +24,9 @@ namespace ER_Smms.Models
 
         public string MapURL { get; set; }
 
-
+        [JsonIgnore]
         public List<Pier> Piers { get; set; }
 
-        //public List<HarbourPier> HarbourPiers { get; set; } //= new List<PersonLanguage>();// Join table-navigation-relation EF Core Specific with no lazy loading /ER
 
     }
 

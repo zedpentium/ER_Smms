@@ -1,0 +1,77 @@
+﻿@model EditServiceTypeViewModel
+
+<div>
+    <h4>Editera Tjänst</h4>
+
+ <div>
+
+                <form class="createeditforms" asp-action="EditServiceTypeSave" method="post" role="form">
+                    <fieldset id="fieldsetbox">
+                    <legend id="legbox">Editera Tjänst (ID: @Model.Id)</legend>
+                    @Html.AntiForgeryToken()
+
+                        <input asp-for="Id" hidden />
+                        <label asp-for="ArtNr"></label>
+                        <input asp-for="ArtNr" />
+                        <br />
+                        <span id="redtext" asp-validation-for="ArtNr"></span>
+                        <br />
+                        <div>
+                            <label asp-for="Type"></label>
+                            <br />
+                            <input asp-for="Type" type="radio" value="boatslip" /> <b> Båtplats</b>
+                            <br />
+                            <input asp-for="Type" type="radio" value="winterstorein" /> <b> Inomhus VinterförvaringsPlats</b>
+                            <br />
+                            <input asp-for="Type" type="radio" value="winterstoreout" /> <b> Utomhus VinterförvaringsPlats</b>
+                            <br />
+                            <input asp-for="Type" type="radio" value="cranelift" /> <b> Kranlyft</b>
+                        </div>
+                        <span id="redtext" asp-validation-for="Type"></span>
+                        <br />
+                        <label asp-for="Label"></label>
+                        <input asp-for="Label" />
+                        <br />
+                        <span id="redtext" asp-validation-for="Label"></span>
+                        <br />
+
+                        @if (@Model.Type == "boatslip") 
+                        {
+                        <label asp-for="Length"></label>
+                        <input asp-for="Length" />
+                        <br />
+                        <span id="redtext" asp-validation-for="Length"></span>
+                        <br />
+                        <label asp-for="Width"></label>
+                        <input asp-for="Width" />
+                        <br />
+                        <span id="redtext" asp-validation-for="Width"></span>
+                        <br />
+                        <label asp-for="Depth"></label>
+                        <input asp-for="Depth" />
+                        <br />
+                        <span id="redtext" asp-validation-for="Depth"></span>
+                        }
+
+                        <br />
+                        <label asp-for="Price"></label>
+                        <input asp-for="Price" />
+                        <br />
+                        <span id="redtext" asp-validation-for="Price"></span>
+                        <br />
+                        <br />
+
+                    <input type="submit" class="btn btn-primary btnWidthSeparate"
+                    name="btnFilter" value="Spara" />
+
+                    <input type="button" class="btn btn-secondary btnWidthSeparate"
+                    name="btnBack" value="Tillbaka"
+                    onClick="location.href='@Url.Action("ServiceType", "Admin")'" />
+                    
+                    </fieldset>
+                </form>
+                @*<p>@Model.SearchResultEmpty</p>*@
+
+        </div>
+
+</div>

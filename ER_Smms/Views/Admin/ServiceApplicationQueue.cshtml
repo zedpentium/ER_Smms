@@ -1,0 +1,135 @@
+﻿@model ServiceApplicationQueueViewModel
+
+<div>
+   <h4>Kunder på Kö för Båtplats</h4>
+
+    <partial name="_ToastHandlerPartial" />
+
+
+<div class="table-container">
+    <div class="row bg-dark text-light">
+@*        <div class="col-1">Id</div>*@
+        <div class="col-3">Kund</div>
+        <div class="col-3">Önskad Tjänst</div>
+        <div class="col-3">BåtInfo</div>
+        <div class="col-3">Alternativ</div>
+    </div>
+        
+        @if (Model.ServiceApplicationQueueListView.Count != 0)
+        {
+            @foreach (ServiceApplication serviceApplication in Model.ServiceApplicationQueueListView)
+            {
+                <div class="row" id="viewlisttable">
+@*                    <div class="col-1">@serviceApplication.Id</div>*@
+                    <div class="col-3  text-wrap text-break">
+                        @if (serviceApplication.Customer != null)
+                        {
+                            <p>UserName: @serviceApplication.Customer.UserName</p>
+                            <p>FörNamn: @serviceApplication.Customer.FirstName</p>
+                        }  
+                        else if(@serviceApplication.Applicant != null)
+                            {
+                            <atag><b>Inget Konto</b></atag>
+                            <p>FörNamn: @serviceApplication.Applicant.FirstName</p>
+                            <p>EfterNamn: @serviceApplication.Applicant.LastName</p>
+                            }
+                    </div>
+                    <div class="col-3">
+                        @if (@serviceApplication.ServiceType.Id == 1)
+                        { <a>Båtplats</a> }
+                        else
+                        { @serviceApplication.ServiceType.Label }
+                    </div>
+                    <div class="col-3">
+                        @if (@serviceApplication.Customer != null)
+                            {
+                            <p>BåtNamn: @serviceApplication.BoatData.Label</p>
+                            <p>BåtModell: @serviceApplication.BoatData.BrandModel</p>
+                            <p>Längd: @serviceApplication.BoatData.Length</p>
+                            <p>Bredd: @serviceApplication.BoatData.Width</p>
+                            <p>Djup: @serviceApplication.BoatData.Depth</p>
+                            @*<p>MaxHöjden, båt på kärra: @serviceApplication.BoatData.Height</p>*@
+                            <p>TotalVikt: @serviceApplication.BoatData.Weight</p>
+                            }
+                        else if(@serviceApplication.Applicant != null)
+                            {
+                            <p>BåtTyp/Modell: @serviceApplication.Applicant.BrandModel</p>
+                            <p>Längd: @serviceApplication.Applicant.Length</p>
+                            <p>Bredd: @serviceApplication.Applicant.Width</p>
+                            <p>Djup: @serviceApplication.Applicant.Depth</p>
+                            }    
+                        </div>
+
+                    <div class="col-3" id="btnBorderBox">
+
+                        <div class="form-sidebyside"> @* Container for buttons *@
+                            <div class="row">
+
+                        <div class="col">
+                            <form asp-action="HandleUserServiceApplication" asp-route-id="@serviceApplication.Id"
+                            method="post" role="form">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="submit" id="optionBtnGreen" value="Hantera">
+                            </form>
+                            <br />
+
+                            @if(serviceApplication.Applicant != null)
+                            { 
+                                <form asp-action="CreateAccountForApplicant" asp-route-id="@serviceApplication.Id"
+                                    method="post" role="form">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="submit" id="optionBtnGreen" value="Skapa Konto">
+                                </form>
+                            }
+                        </div>
+
+
+@*                        <div class="col">
+                            <form asp-action="RemoveInQueueUserServiceApplication" asp-route-id="@serviceApplication.Id"
+                            method="post" role="form">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="submit" id="optionBtnGreen" value="Ta Bort från Kö">
+                            </form>
+                        </div>*@
+
+
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                        <div class="col">
+                            <form asp-action="DeleteUserServiceApplication" asp-route-id="@serviceApplication.Id"
+                            method="post" role="form"
+                            onclick="return confirm('Är du säker på att du vill radera denna Ansökan?')">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="submit" id="optionBtnRed" value="Radera">
+                            </form>
+                        </div>
+                        }
+
+                            </div> @* ROW *@
+                        </div> @* Container for buttons *@
+
+                        <div class="form-sidebyside-floatclear"></div>
+                    </div> @* BorderButton Box *@
+
+                </div> @* viewTable *@
+            }
+        }
+        else
+        { 
+            <p>Inga i kön...</p>
+        }
+
+
+</div>
+
+
+</div>
+                

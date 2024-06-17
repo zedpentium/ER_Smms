@@ -1,0 +1,70 @@
+﻿@model CreateWinterstoreSpotViewModel
+
+    <div class="border border-6 bg-secondary border-primary rounded-3 p-1">
+        <div>
+            <h4>Skapa ny VinterförvaringsPlatsss</h4>
+
+            <div class="row">
+                <div class="col-md-11">
+                    <form class="adminforms" asp-action="CreateWinterstoreSpotSave_Partial" method="post" role="form">
+                            @Html.AntiForgeryToken()
+
+                            <div class="row mb-3">
+                                <label asp-for="Label" class="col-sm-6 col-form-label"></label>
+                                <div class="col-sm-5">
+                                    <input asp-for="Label" class="form-control"/>
+                                </div>
+                            <span id="redtext" asp-validation-for="Label"></span>
+                            </div>
+                            <div class="row mb-3">
+                            <label asp-for="Length" class="col-sm-6 col-form-label"></label>
+                            <div class="col-sm-5">
+                            <input asp-for="Length" class="form-control"/>
+                            </div>
+                            <span id="redtext" asp-validation-for="Length"></span>
+                            </div>
+                            <div class="row mb-3">
+                            <label asp-for="Width" class="col-sm-6 col-form-label"></label>
+                            <div class="col-sm-5">
+                            <input asp-for="Width" class="form-control"/>
+                            </div>
+                            <span id="redtext" asp-validation-for="Width"></span>
+                            </div>
+                            <div class="row mb-3">
+                            <label asp-for="Height" class="col-sm-6 col-form-label"></label>
+                            <div class="col-sm-5">
+                            <input asp-for="Height" class="form-control"/>
+                            </div>
+                            <span id="redtext" asp-validation-for="Height"></span>
+                            </div>
+                            <div class="row mb-3">
+                            <label asp-for="ServiceTypeId" class="col-sm-6 col-form-label"></label>
+                            <div class="col-sm-5">
+                            <select asp-for="ServiceTypeId" class="form-control">
+                                <option value="" disabled selected>Välj FörvaringsTyp</option>
+                                @{
+                                    if (Model.ServiceTypeListView != null)
+                                    {
+                                        foreach (ServiceType serviceType in Model.ServiceTypeListView)
+                                        {
+                                            <option value="@serviceType.Id">@serviceType.Label</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                            </div>
+                            </div>
+                            <br />
+                            <br />
+                            <input type="submit" class="btn btn-primary" name="btnFilter" value="Skapa" />
+                    </form>
+
+                </div> @* End Col-8 md*@
+            </div> @* End Row*@
+
+        </div>
+
+
+    </div> @* End Border Box*@
+
+

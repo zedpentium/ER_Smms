@@ -1,0 +1,21 @@
+﻿@*@using System.Globalization
+@model FrontendViewModel*@
+
+@*@using Microsoft.AspNetCore.Identity*@
+@*@inject SignInManager<IdentityAppUser> SignInManager
+@inject UserManager<IdentityAppUser> UserManager*@
+
+
+<div>
+    <h4>Välkommen till Tjällevikens Hamn</h4>
+    <br />
+    <p>Ansöka om båtplats? <input type="button" class="btn btn-secondary"
+                name="applyforSpot" value="Ansök båtplats"
+                onClick="location.href='@Url.Action("ApplyForBoatslip", "Frontend")'" /></p>
+
+    <br />
+    <br />
+    
+
+</div>
+                

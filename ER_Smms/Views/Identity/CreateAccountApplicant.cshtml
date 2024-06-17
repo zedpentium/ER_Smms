@@ -1,0 +1,74 @@
+﻿@model CreateAccountApplicantViewModel
+@{
+    ViewData["Title"] = "Registrera nytt Konto åt kund, från deras ansökan.";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form class="form-group" asp-action="CreateAccountFromApplicantSave" method="post">
+            <h4>Nytt Konto Info</h4>
+            <hr />
+            @*<div asp-validation-summary="All" class="text-danger"></div>*@
+            <div class="form-groupa">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-groupa">  <!-- Added First and lastname and Birthdate /ER -->
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-groupa">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-groupa">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <h4>Ny BåtInfo kopplat till ovan konto</h4>
+            <hr />
+@*            <div asp-validation-summary="All" class="text-danger"></div>*@
+            <div class="form-groupa">
+                <label asp-for="Label"></label>
+                <input asp-for="Label" class="form-control" />
+                <span asp-validation-for="Label" class="text-danger"></span>
+            </div>
+            <div class="form-groupa">
+                <label asp-for="BrandModel"></label>
+                <input asp-for="BrandModel" class="form-control" />
+                <span asp-validation-for="BrandModel" class="text-danger"></span>
+            </div>
+            <div class="form-groupa">
+                <label asp-for="Length"></label>
+                <input asp-for="Length" class="form-control" />
+                <span asp-validation-for="Length" class="text-danger"></span>
+            </div>
+            <div class="form-groupa">
+                <label asp-for="Width"></label>
+                <input asp-for="Width" class="form-control" />
+                <span asp-validation-for="Width" class="text-danger"></span>
+            </div>
+            <div class="form-groupa">
+                <label asp-for="Depth"></label>
+                <input asp-for="Depth" class="form-control" />
+                <span asp-validation-for="Depth" class="text-danger"></span>
+            </div>
+            <br />
+            <br />
+
+            <button type="submit" class="btn btn-primary">Skapa Kund-Konto</button>
+        </form>
+    </div>
+
+</div>
+
+@*@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}*@

@@ -1,0 +1,116 @@
+﻿@using ER_Smms.Models.ViewModels
+@using ER_Smms.Models.ViewModels.Admin
+@using ER_Smms.Models
+@using System.Globalization
+@model WinterstoreSpotViewModel
+
+<partial name="_CustomerTopMenu" />
+
+<div id="adminpierss">
+    <h4>Hantera VinterförvaringsPlatser</h4>
+    <br />
+
+    <partial name="_ToastHandlerPartial" />
+
+    <div>
+        Inomhus Totalt m2 uthyrd: <mark><b>@Model.Totalm2RentoutIndoors</b>m2</mark> - av 140m2 total yta
+        <br />
+        Utomhus Totalt m2 uthyrd:  <mark><b>@Model.Totalm2RentoutOutdoors</b>m2</mark> - av 450m2 total yta
+        <br />
+        <br />
+        L = Längd, B = Bredd i meter
+    </div>
+    <br />
+    
+<div class="table-container">
+    <div class="row bg-dark text-light">
+        <div class="col-2">PlatsNamn</div>
+        <div class="col-2">Storlek</div>
+        <div class="col-2">m2, Pris</div>
+        <div class="col-1">Höjd(m)</div>
+        <div class="col-2">Tjänst</div>
+        <div class="col-1">KundBåt</div>
+        <div class="col-2">Alternativ</div>
+    </div>
+        
+        @if (Model.WinterstoreSpotListView.Count != 0)
+        {
+            @foreach (WinterstoreSpot_DTO spot_DTO in Model.WinterstoreSpotListView)
+            {
+                <div class="row" id="viewlisttable">
+                    <div class="col-2 text-wrap text-break">@spot_DTO.Label</div>
+                    <div class="col-2">
+                        L(m) @spot_DTO.Length
+                        B(m) @spot_DTO.Width
+                        </div>
+                    <div class="col-2">
+                        @spot_DTO.SpotM2.ToString("F") m2
+                        <br />
+                        @{
+                            decimal wSpotPrice = spot_DTO.SpotM2 * spot_DTO.ServiceType.Price;
+                        }
+                        @wSpotPrice.ToString("F") kr
+                        </div>
+                    <div class="col-1">@spot_DTO.Height</div>
+                    <div class="col-2">
+                        @if (spot_DTO.ServiceType != null)
+                        { 
+                            @spot_DTO.ServiceType.Label
+                        }
+                    </div>
+                    <div class="col-1 text-wrap text-break">
+                        @if(@spot_DTO.BoatData != null)
+                        {@spot_DTO.BoatData.Label <br /> @spot_DTO.BoatData.Customer.UserName}
+                    </div>
+
+                    <div class="col-2" id="btnBorderBox">
+
+                        <div class="form-sidebyside">
+                            @* Container for buttons *@
+
+                            <div class="row">
+
+                                <div class="col">
+                                    <form asp-action="EditWinterstoreSpot" asp-route-id="@spot_DTO.Id"
+                                  method="post" role="form">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="submit" id="optionBtnGreen" value="Editera">
+                                    </form>
+                                </div>
+
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
+                                    <div class="col">
+                                        <form asp-action="DeleteWinterstoreSpot" asp-route-id="@spot_DTO.Id"
+                                  method="post" role="form"
+                                  onclick="return confirm('Är du säker på att du vill radera denna VinterförvaringsPlats?')">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="submit" id="optionBtnRed" value="Radera">
+                                        </form>
+                                    </div>
+                                }
+
+                            </div> @* ROW *@
+                        </div> @* Container for buttons *@
+
+                        <div class="form-sidebyside-floatclear"></div>
+                    </div> @* BorderButton Box *@
+
+                </div> @* viewTable *@
+            } @* End for each *@
+
+        }
+        else
+        { 
+            <p>Inga vinterförvaringsPlatser i databasen...</p>
+        }
+         
+        
+</div>
+
+</div>
+                

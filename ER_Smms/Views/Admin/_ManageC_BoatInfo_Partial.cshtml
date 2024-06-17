@@ -1,0 +1,46 @@
+﻿@model ManageCustomerViewModel
+
+<div class="col-12">
+
+    <div class="row">
+        <div class="row">
+            <h6>Båt(ar)</h6>
+            <br />
+            <br />
+        </div>
+
+        <div class="row">
+
+        <div class="border border-6 bg-secondary border-primary rounded-3 p-1">
+            @if (Model.CustomerAllInfo.BoatDatas != null)
+            {
+                <b><label asp-for="SelectedBoatDataId"></label></b>
+                <select asp-for="SelectedBoatDataId" onchange="showSelectedBoat(this)">
+                    <option value="0" disabled selected>Välj Båt</option>
+
+                    @foreach (BoatData boat in @Model.CustomerAllInfo.BoatDatas)
+                    {
+                        <option value="@boat.Id">@boat.Label</option>
+                    }
+
+                </select>
+
+                <br />
+                <br />
+                
+                <div id="boatinfomanage"><partial name="_ManageC_BoatInfo_SubManage_Partial" /></div>
+            }
+            else
+            {
+                <p>Kund har ingen båtinfo lagrad...</p>
+            }
+
+        </div> @* End -BorderStyle *@
+
+        </div>
+
+
+    </div>
+
+</div>
+

@@ -44,14 +44,16 @@ namespace ER_Smms.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
+            [EmailAddress(ErrorMessage = "{0} måste vara en epost-adress")]
+            [Display(Name = "AnvändarNamn (epost):")]
             public string Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
+            [Display(Name = "Lösenord:")]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Håll dig inloggad?")]
             public bool RememberMe { get; set; }
         }
 
@@ -121,7 +123,7 @@ namespace ER_Smms.Areas.Identity.Pages.Account
 
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine(result);
+                    //System.Diagnostics.Debug.WriteLine(result);
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }

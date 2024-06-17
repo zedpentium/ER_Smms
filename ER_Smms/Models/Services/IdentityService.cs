@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ER_Smms.Models.ViewModels;
-using ER_Smms.Models.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using ER_Smms.Models.Interfaces;
+using ER_Smms.Models.ViewModels.Admin;
+using ER_Smms.Models.ViewModels.Frontend;
 
 namespace ER_Smms.Models.Services
 {

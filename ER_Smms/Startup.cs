@@ -1,25 +1,39 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using ER_Smms.Data;
 using ER_Smms.Models;
 using ER_Smms.Models.Services;
-using ER_Smms.Data;
 using ER_Smms.Models.Interfaces;
+using ER_Smms.Models.Repositories;
+using ER_Smms.Models.ViewModels;
+using ER_Smms.Models.ViewModels.Admin;
+using ER_Smms.Extensions;
+using NLog;
+using ER_Smms.Blappserv.Interfaces;
+using ER_Smms.Blappserv.ViewModels;
+using ER_Smms.Blappserv.Services;
+using System.Net.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.StaticFiles;
 
+
+//using LoggerService;
 
 namespace ER_Smms
 {
@@ -30,23 +44,55 @@ namespace ER_Smms
 
         public Startup(IConfiguration configuration, IWebHostEnvironment iWebHostEnvironment)
         {
+            //LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+            //LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+            LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
             Environment = iWebHostEnvironment;
         }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //services.AddSingleton(new HttpClient { BaseAddress = new Uri(HostEnvironment.BaseAddress) });
+
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>
+            //ILoggerManager, LoggerManager > ();
+
+            //ClassInstance = new
+            //services.AddSingleton<Startup>();
+            //services.AddSingleton<IHttpContextAccessor>(s => s.HttpContextAccessor<Startup>());
+            //services.AddSingleton<ILoggerManager>(s => s.LoggerManager<Startup>());
+            services.AddSingleton<ILoggerManager, LoggerManager>();
+
+            // --- Serverside Blazor
+            services.AddRazorPages();
+
+            services.AddServerSideBlazor(options =>
+            {
+                options.DetailedErrors = true;
+                //options.DisconnectedCircuitMaxRetained = 100;
+                //options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(3);
+                //options.JSInteropDefaultCallTimeout = TimeSpan.FromMinutes(1);
+                //options.MaxBufferedUnacknowledgedRenderBatches = 10;
+                //.AddHubOptions(options =>
+                // {
+                //     options.ClientTimeoutInterval = TimeSpan.FromSeconds(60);
+                //     options.EnableDetailedErrors = true;
+                //     options.HandshakeTimeout = TimeSpan.FromSeconds(10);
+                //     options.KeepAliveInterval = TimeSpan.FromSeconds(10);
+                //     options.MaximumParallelInvocationsPerClient = 1;
+                //     options.MaximumReceiveMessageSize = 32 * 1024;
+                //     options.StreamBufferCapacity = 10;
+                // });
+            });
+            services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Blappserv/Pages");
 
             services.AddControllersWithViews();
 
             services.AddDistributedMemoryCache();  // To use session state /ER
-
-            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
-
 
             services.AddSession(options =>  // To use session state /ER
             {
@@ -55,6 +101,13 @@ namespace ER_Smms
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+
+
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
 
             // -------- DBContexts etc start------- For MySQL server 8.0.27
@@ -75,10 +128,13 @@ namespace ER_Smms
                 //.EnableDetailedErrors()
             );
 
-            services.AddDefaultIdentity<IdentityAppUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                         .AddRoles<IdentityRole>()
-                         .AddRoleManager<RoleManager<IdentityRole>>()
-                         .AddEntityFrameworkStores<AppDbContext>();
+            services.AddDefaultIdentity<IdentityAppUser>(options => {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ "; })
+                .AddRoles<IdentityRole>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddEntityFrameworkStores<AppDbContext>();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -88,7 +144,7 @@ namespace ER_Smms
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 0;
+                options.Password.RequiredLength = 5;
                 options.Password.RequiredUniqueChars = 0;
             });
 
@@ -97,28 +153,36 @@ namespace ER_Smms
 
 
             // DI Repos
-            services.AddScoped<IPeopleRepo, DbPeopleRepo>();
-            services.AddScoped<ICountryRepo, DbCountryRepo>();
-            services.AddScoped<ICityRepo, DbCityRepo>();
-            services.AddScoped<ILanguageRepo, DbLanguageRepo>();
-
             services.AddScoped<IHarbourRepo, DbHarbourRepo>();
             services.AddScoped<IPierRepo, DbPierRepo>();
             services.AddScoped<IBoatslipRepo, DbBoatslipRepo>();
+            services.AddScoped<IMooringTypeRepo, DbMooringTypeRepo>();
+            services.AddScoped<IBoatDataRepo, DbBoatDataRepo>();
+            services.AddScoped<IWinterstoreSpotRepo, DbWinterstoreSpotRepo>();
+            services.AddScoped<IServiceTypeRepo, DbServiceTypeRepo>();
+            services.AddScoped<IServiceApplicationRepo, DbServiceApplicationRepo>();
+            services.AddScoped<IServiceHistoryRepo, DbServiceHistoryRepo>();
+            services.AddScoped<IApplicantRepo, DbApplicantRepo>();
 
             // DI Services
-            services.AddScoped<IPeopleService, PeopleService>();
-            services.AddScoped<ICountryService, CountryService>();
-            services.AddScoped<ICityService, CityService>();
-            services.AddScoped<ILanguageService, LanguageService>();
-
             services.AddScoped<IHarbourService, HarbourService>();
             services.AddScoped<IPierService, PierService>();
             services.AddScoped<IBoatslipService, BoatslipService>();
+            services.AddScoped<IMooringTypeService, MooringTypeService>();
+            services.AddScoped<IBoatDataService, BoatDataService>();
+            services.AddScoped<IWinterstoreSpotService, WinterstoreSpotService>();
+            services.AddScoped<IServiceTypeService, ServiceTypeService>();
+            services.AddScoped<IServiceApplicationService, ServiceApplicationService>();
+            services.AddScoped<IServiceHistoryService, ServiceHistoryService>();
+            services.AddScoped<IApplicantService, ApplicantService>();
+
+            // Viewmodel DI för Blazor Server
+            services.AddScoped<IBEditBoatslipViewModel, BEditBoatslipViewModel>();
+            services.AddScoped<IBManageCustomerViewModel, BManageCustomerViewModel>();
+            services.AddScoped<ManageCustomerService>();
+            services.AddScoped<BlazorAdminController>();
 
 
-
-            services.AddRazorPages();
 
             //services.ConfigureApplicationCookie(opts => // Custom Identity Access denied path /ER
             //{
@@ -131,41 +195,77 @@ namespace ER_Smms
         {
             if (env.IsDevelopment())
             {
+                //app.UseDeveloperExceptionPage();
+                //app.UseDatabaseErrorPage();
+
                 app.UseDeveloperExceptionPage();
+
+                //app.UseBrowserLink();
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                //app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
+            //app.UsePathBase("/bapp/"); this is allready set in Blazor _Host.cshtml
+            //app.UsePathBase("/");
+            //app.UsePathBase("/blappserv/");
+
+            //app.MapWhen(ctx => !ctx.Request.Path
+            //    .StartsWithSegments("/_framework/blazor.server.js"),
+            //        subApp => subApp.UseStaticFiles());
+
+            //var provider = new FileExtensionContentTypeProvider();
+            //provider.Mappings["{EXTENSION}"] = "{CONTENT TYPE}";
+
+            //app.UseStaticFiles(new StaticFileOptions { ContentTypeProvider = provider });
+
+            app.UseWebSockets();
+
+            app.ConfigureCustomExceptionMiddleware();  // My own custom Global errorhandling Eric R
 
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
+            //app.UseStaticFiles("/Blappserv");
+
             app.UseSession(); // To use session state /ER
 
             app.UseAuthentication();
-
             app.UseRouting();
             app.UseAuthorization();
 
+
+
+
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
-
-
                 endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Frontend}/{action=Index}/{id?}");
+
 
                 endpoints.MapControllerRoute(
                 name: "Admin",
                 pattern: "Admin/{id?}",
                 defaults: new { controller = "Admin", action = "Index" });
 
+                endpoints.MapControllerRoute(
+                name: "Welcome",
+                pattern: "Welcome/{id?}",
+                defaults: new { controller = "Frontend", action = "Welcome" });
 
+
+
+                endpoints.MapBlazorHub();
+                //endpoints.MapRazorPages();
+                //endpoints.MapFallbackToPage("/blappserv/{*clientroutes:nonfile}", "/_Host");
+                endpoints.MapFallbackToPage("/blappserv/{*page}", "/_Host");
+                //endpoints.MapFallbackToPage("/_Host");
+                //endpoints.MapFallbackToPage("/blappserv", "/_Host");
 
 
                 //endpoints.MapControllerRoute(
@@ -178,30 +278,6 @@ namespace ER_Smms
                 //pattern: "User/{id?}",
                 //defaults: new { controller = "User", action = "Index" });
 
-                //endpoints.MapControllerRoute(
-                //name: "Country",
-                //pattern: "Country/{id?}",
-                //defaults: new { controller = "Country", action = "Index" });
-
-                //endpoints.MapControllerRoute(
-                //name: "City",
-                //pattern: "City/{id?}",
-                //defaults: new { controller = "City", action = "Index" });
-
-                //endpoints.MapControllerRoute(
-                //name: "Language",
-                //pattern: "Language/{id?}",
-                //defaults: new { controller = "Language", action = "Index" });
-
-                //endpoints.MapControllerRoute(
-                //name: "PersonDetails",
-                //pattern: "Details/{id?}",
-                //defaults: new { controller = "People", action = "PersonDetails" });
-
-                //endpoints.MapControllerRoute(
-                //name: "AddLanguages",
-                //pattern: "AddLanguagesToPerson/{id?}",
-                //defaults: new { controller = "People", action = "AddLanguageView" });
 
 
                 //endpoints.MapControllerRoute(

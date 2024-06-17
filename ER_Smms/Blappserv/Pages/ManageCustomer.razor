@@ -1,0 +1,103 @@
+﻿@page "/admin/blappserv/managecustomer/{username}"
+
+@using System.ComponentModel;
+@implements IDisposable
+@*@inject ManageCustomerService MCService*@
+@inject IBManageCustomerViewModel ViewModel
+@inherits OwningComponentBase<ManageCustomerService>
+
+<div id="managecustomercardwrapper">
+    <h4>Hantera Kund</h4>
+    <br />
+    <CustomerTopMenu_Component />
+    <partial name="_ToastHandlerPartial" />
+
+    <div id="customerallinfo">
+        <div class="container">
+
+            <CascadingValue Value=@ViewModel Name="ViewModel">
+
+            <div class="row"> @*Start rowwrapper*@
+
+                    <div class="col-8">
+                        <CustomerInfo_Component />
+                    </div>
+                    <div class="col-4">
+
+                    </div>
+
+            </div> @*End rowwrapper*@
+
+           <div class="row"> @*Start rowwrapper*@
+                <div class="col-12">
+
+            <TabControl>
+              <TabPage Text="Tjänster">
+                <h1>Tjänster</h1>
+              </TabPage>
+              <TabPage Text="Tab 2">
+                <h1>Flik 2</h1>
+              </TabPage>
+              <TabPage Text="Hantera Båt(ar)">
+                <CustomerBoat_Component />
+              </TabPage>
+            </TabControl>
+
+                </div>
+            </div>  @*End rowwrapper*@
+
+        </CascadingValue>
+
+        </div> @* End Container*@
+
+    </div> @* End customerallinfo*@
+
+</div> @*managecustomercardwrapper*@
+
+    
+
+@code {
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel.CustomerAllInfo = await @Service.GetManageCustomerAsync(UserName);
+        ViewModel.FreeBoatslips = await @Service.GetFreeBoatslips();
+        ViewModel.FreeWinterstoreSpots = await @Service.GetFreeWinterstoreSpots();
+
+        ViewModel.SelectedBoatDataId = 0;
+        ViewModel.BoatDTO = null;
+        ViewModel.SelectedBoatslipId = 0;
+        ViewModel.SelectedWinterstoreSpotId = 0;
+
+        ViewModel.PropertyChanged += async (sender, e) => {
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        };
+        await base.OnInitializedAsync();
+    }
+
+
+    async void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedHandler;
+    }
+
+
+
+}
+
+

@@ -1,25 +1,18 @@
-﻿using ER_Smms.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ER_Smms.Models.Interfaces
 {
     public interface IPierRepo
     {
-        string Create(Pier obj, Harbour selectedobj);
+        Task Create(Pier obj);
 
+        Task<List<Pier>> ReadAll();
 
-        List<Pier> ReadAll();
+        Task<Pier> Read(int id);
 
+        Task Update(Pier obj);
 
-        Pier Read(int id);
-
-
-        string Update(Pier obj);
-
-
-        bool Delete(Pier obj);
+        Task Delete(Pier obj);
     }
 }

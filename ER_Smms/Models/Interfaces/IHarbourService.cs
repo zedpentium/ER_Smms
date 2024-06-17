@@ -1,24 +1,18 @@
-﻿using ER_Smms.Models.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ER_Smms.Models.Interfaces
 {
     public interface IHarbourService
     {
-        string Create(CreateHarbourViewModel viewModel);
+        Task Create(Harbour obj);
 
-        HarbourViewModel ReadAll();
+        Task<List<Harbour>> ReadAll();
 
-        //HarbourViewModel FindBy(HarbourViewModel findbymodel);
+        Task<Harbour> FindBy(int id);
 
-        Harbour FindBy(int id);
+        Task Update(Harbour obj);
 
-        string Update(Harbour obj);
-
-        bool Remove(int id);
-
+        Task Remove(int id);
     }
 }

@@ -1,0 +1,92 @@
+﻿@model UserServiceApplicationViewModel
+
+<div>
+   <h4>Ansökningar:</h4>
+
+    <partial name="_ToastHandlerPartial" />
+
+<div>
+    <a asp-action="UserCreateServiceApplication" class="btn btn-secondary">Ny TjänstAnsökan</a>
+</div>
+    <br />
+
+<div class="table-container">
+    <div class="row bg-dark text-light">
+        <div class="col-1">Id</div>
+        <div class="col-4">Önskad Tjänst</div>
+        <div class="col-5">BåtInfo</div>
+        <div class="col-2">Alternativ</div>
+    </div>
+        
+        @if (Model.UserServiceApplicationListView.Count != 0)
+        {
+            @foreach (ServiceApplication serviceApplication in Model.UserServiceApplicationListView)
+            {
+                <div class="row" id="viewlisttable">
+                    <div class="col-1">@serviceApplication.Id</div>
+                    <div class="col-3">
+                        @if (@serviceApplication.ServiceType.Id == 1)
+                        { <a>Båtplats</a> }
+                        else
+                        { @serviceApplication.ServiceType.Label }
+                    </div>
+                    <div class="col-3">
+                        BåtNamn: @serviceApplication.BoatData.Label<br />
+                        BåtModell: @serviceApplication.BoatData.BrandModel<br />
+                        Längd: @serviceApplication.BoatData.Length<br />
+                        Bredd: @serviceApplication.BoatData.Width<br />
+                        Djup: @serviceApplication.BoatData.Depth<br />
+                        MaxHöjden, båt på kärra: @serviceApplication.BoatData.Height<br />
+                        TotalVikt: @serviceApplication.BoatData.Weight
+                        </div>
+
+                    <div class="col-2" id="btnBorderBox">
+
+                        <div class="form-sidebyside"> @* Container for buttons *@
+                           @* <div class="row">
+
+                        <div class="col">
+                            <form asp-action="EditUserServiceApplication" asp-route-id="@serviceApplication.Id"
+                            method="post" role="form">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="submit" id="optionBtnGreen" value="Editera">
+                            </form>
+                        </div>
+
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                        <div class="col">
+                            <form asp-action="DeleteUserServiceApplication" asp-route-id="@serviceApplication.Id"
+                            method="post" role="form"
+                            onclick="return confirm('Är du säker på att du vill radera denna Ansökan?')">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="submit" id="optionBtnRed" value="Radera">
+                            </form>
+                        </div>
+                        }
+
+                            </div> @* ROW *@
+
+                        </div> @* Container for buttons *@
+
+                        <div class="form-sidebyside-floatclear"></div>
+                    </div> @* BorderButton Box *@
+
+                </div> @* viewTable *@
+            }
+        }
+        else
+        { 
+            <p>Inga Ansökningar i databasen.</p>
+        }
+
+
+</div>
+
+
+</div>
+                

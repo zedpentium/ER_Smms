@@ -1,0 +1,88 @@
+﻿@model EditBoatDataViewModel
+
+<div id="adminpiers">
+    @*    <h4>Skapa ny Hamn</h4>*@
+
+
+
+    <div>
+        <form class="createeditforms" asp-action="EditBoatDataSave" method="post" role="form">
+            <fieldset id="fieldsetcreateharbour">
+                <legend id="legendcreateharbour">Editera BåtInfo (ID: @Model.Id)<br />
+                    Skapad: @Model.CreatedDate<br /></legend>
+                @Html.AntiForgeryToken()
+
+                <input asp-for="Id" hidden />
+@*                <input asp-for="CustomerId" hidden />*@
+
+               <label asp-for="Label"></label>
+                <br />
+                <input asp-for="Label" />
+                <br />
+                <span id="redtext" asp-validation-for="Label"></span>
+                <br />
+                <br />
+                <label asp-for="BrandModel"></label>
+                <br />
+                <input asp-for="BrandModel" />
+                <br />
+                <span id="redtext" asp-validation-for="BrandModel"></span>
+                <br />
+                <br />
+                <label asp-for="Length"></label>
+                <br />
+                <input asp-for="Length" />
+                <br />
+                <span id="redtext" asp-validation-for="Length"></span>
+                <br />
+                <br />
+                <label asp-for="Width"></label>
+                <br />
+                <input asp-for="Width" />
+                <br />
+                <span id="redtext" asp-validation-for="Width"></span>
+                <br />
+                <br />
+                <label asp-for="Depth"></label>
+                <br />
+                <input asp-for="Depth" />
+                <br />
+                <span id="redtext" asp-validation-for="Depth"></span>
+                <br />
+                <br />
+                <label asp-for="Weight"></label>
+                <br />
+                <input asp-for="Weight" />
+                <br />
+                <span id="redtext" asp-validation-for="Weight"></span>
+                <br />
+                <br />
+                <label asp-for="Height"></label>
+                <br />
+                <input asp-for="Height" />
+                <br />
+                <span id="redtext" asp-validation-for="Height"></span>
+                <br />
+                <br />
+                <div>
+                    <label asp-for="HaveInsurance"></label>
+                    <br />
+                    <input asp-for="HaveInsurance" type="radio" value="yes" /> <b> Ja</b>
+                    <br />
+                    <input asp-for="HaveInsurance" type="radio" value="no" /> <b> Nej</b>
+                </div>
+                <br />
+                <br />
+                <input type="submit" class="btn btn-primary"
+                name="btnFilter" value="Spara" />
+                <input type="button" class="btn btn-secondary btnWidthSeparate"
+                name="btnBack" value="Tillbaka"
+                onClick="location.href='@Url.Action("BoatData", "Admin")'" />
+            </fieldset>
+        </form>
+
+    </div>
+
+
+</div>
+

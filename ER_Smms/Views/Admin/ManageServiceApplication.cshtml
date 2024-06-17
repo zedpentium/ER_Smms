@@ -1,0 +1,178 @@
+﻿@model ManageServiceApplicationViewModel
+
+<div>
+    <h4>Hantera TjänstAnsökan</h4>
+
+    <div>
+
+        <div>
+            @if (@Model.Customer != null)
+            {
+            <p>UserName: @Model.Customer.UserName</p>
+            <p>FörNamn: @Model.Customer.FirstName</p>
+            }
+            else if(@Model.Applicant != null)
+            {
+            <p>UserName: @Model.Applicant.FirstName</p>
+            <p>FörNamn: @Model.Applicant.LastName</p>
+            }
+
+        </div>
+
+        <div>
+            @if (@Model.Customer != null)
+            {
+            <p>BåtNamn: @Model.BoatData.Label</p>
+            <p>BåtModell: @Model.BoatData.BrandModel</p>
+            <p>Längd: @Model.BoatData.Length</p>
+            <p>Bredd: @Model.BoatData.Width</p>
+            <p>Djup: @Model.BoatData.Depth</p>
+            <p>MaxHöjden, båt på kärra: @Model.BoatData.Height</p>
+            <p>TotalVikt: @Model.BoatData.Weight</p>
+            }
+            else if(@Model.Applicant != null)
+            {
+            <p>BåtTyp/Modell: @Model.Applicant.BrandModel</p>
+            <p>Längd: @Model.Applicant.Length</p>
+            <p>Bredd: @Model.Applicant.Width</p>
+            <p>Djup: @Model.Applicant.Depth</p>
+            }
+        </div>
+
+        <br/>
+
+        <div>
+           <b>Önskad Tjänst: 
+            @if (@Model.ServiceType.Id == 1)
+            {
+                <a>Båtplats</a>
+            }
+            else
+            {
+                @Model.ServiceType.Label
+            }
+            </b>
+        </div>
+
+        <br />
+
+
+        <form class="createeditforms" asp-action="HandleUserServiceApplicationSave" method="post" role="form">
+            <fieldset id="fieldsetbox">
+                <legend id="legbox"></legend>
+                @Html.AntiForgeryToken()
+
+                <input asp-for="Id" hidden />
+                <input asp-for="ServiceTypeId" hidden />
+                <input asp-for="BoatDataId" hidden />
+                <input asp-for="CustomerId" hidden />
+                <input asp-for="ApplicantId" hidden />
+
+                @{
+                    switch (Model.ServiceType.Type)
+                    {
+                        case "boatslip":
+                            <h6>Lediga Båtplatser</h6>
+                            <label asp-for="BoatslipId"></label>
+                            <br />
+                            <select asp-for="BoatslipId">
+                                <option value="" disabled selected>Välj Båtplats</option>
+                                @{
+                                    if (Model.BoatslipListView != null)
+                                    {
+                                        foreach (Boatslip boatslip in Model.BoatslipListView)
+                                        {
+                                            <option value="@boatslip.Id">
+                                            @boatslip.Label Längd: @boatslip.Length Bredd: @boatslip.Width Djup: @boatslip.Depth</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                            break;
+
+
+                        case "winterstorein":
+                            <h6>Lediga Vinterförvarings Inne</h6>
+                            <label asp-for="WinterstoreSpotId"></label>
+                            <br />
+                            <select asp-for="WinterstoreSpotId">
+                                <option value="" disabled selected>Välj VinterFörvaring</option>
+                                @{
+                                    if (Model.WinterstoreSpotListView != null)
+                                    {
+                                        foreach (WinterstoreSpot winterstoreSpot in Model.WinterstoreSpotListView)
+                                        {
+                                            <option value="@winterstoreSpot.Id">
+                                            @winterstoreSpot.Label Längd: @winterstoreSpot.Length
+                                            Bredd: @winterstoreSpot.Width
+                                            TakHöjd: @winterstoreSpot.Height
+                                            </option>
+                                        }
+                                    }
+                                }
+                            </select>
+                            break;
+
+                        case "winterstoreout":
+                            <h6>Lediga Vinterförvarings Ute</h6>
+                            <label asp-for="WinterstoreSpotId"></label>
+                            <br />
+                            <select asp-for="WinterstoreSpotId">
+                                <option value="" disabled selected>Välj VinterFörvaring</option>
+                                @{
+                                    if (Model.WinterstoreSpotListView != null)
+                                    {
+                                        foreach (WinterstoreSpot winterstoreSpot in Model.WinterstoreSpotListView)
+                                        {
+                                            <option value="@winterstoreSpot.Id">
+                                            @winterstoreSpot.Label Längd: @winterstoreSpot.Length
+                                            Bredd: @winterstoreSpot.Width
+                                            TakHöjd: @winterstoreSpot.Height
+                                            </option>
+                                        }
+                                    }
+                                }
+                            </select>
+                            break;
+
+                    } // End switch
+
+                }
+
+                <br />
+                <br />
+                <input type="submit" class="btn btn-primary btnWidthSeparate"
+                       name="btnFilter" value="Tilldela Tjänst och Godkänn" />
+                <input type="button" class="btn btn-secondary btnWidthSeparate"
+                       name="btnBack" value="Tillbaka"
+                       onClick="location.href='@Url.Action("UsersServiceApplications", "Admin")'" />
+                @*                <input type="button" class="btn btn-secondary btnWidthSeparate"
+                    name="btnBack" value="Sätta i Kön"
+                    onClick="location.href='@Url.Action("PutInQueueUserServiceApplication", "Admin")'" />*@
+            </fieldset>
+        </form>
+                    <br />
+                    <br />
+                <div>
+            @if (Model.InQueue == 0)
+            {
+                <form asp-action="PutInQueueUserServiceApplication" asp-route-id="@Model.Id"
+                          method="post" role="form">
+                    @Html.AntiForgeryToken()
+                    <input type="submit" class="btn btn-success btnWidthSeparate" value="Sätt i Kö">
+                </form>
+            }
+            else
+            {
+                <form asp-action="RemoveInQueueUserServiceApplication" asp-route-id="@Model.Id"
+                          method="post" role="form">
+                    @Html.AntiForgeryToken()
+                    <input type="submit" class="btn btn-danger btnWidthSeparate" value="Ta bort från Kö">
+                </form>
+            }
+        </div>
+
+    </div>
+
+</div>
+

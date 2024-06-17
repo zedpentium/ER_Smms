@@ -1,0 +1,116 @@
+﻿@page "/admin/blappserv/"
+
+@using System.ComponentModel;
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+@implements IDisposable
+@inherits OwningComponentBase<ManageCustomerService>
+@*@inject ManageCustomerService _mCService*@
+@inject IBManageCustomerViewModel ViewModel
+
+<div id="adminharbours">
+    <h4>Kund-Lista</h4>
+    <br />
+
+@if (ViewModel?.CustomerAllInfoListView == null)
+    {
+        <div class="loadspinner"></div>
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+
+    @if (ViewModel.CustomerAllInfoListView != null && ViewModel.CustomerAllInfoListView.Count != 0)
+        {
+
+        @foreach (CustomerAllInfoDTO customer in ViewModel.CustomerAllInfoListView)
+            {
+                <div class="row" id="viewlisttable">
+                    <div class="col-5 text-wrap text-break">
+                        UserName: <b>@customer.UserName</b><br />
+                        Förnamn: <b>@customer.FirstName</b><br />
+                        EfterNamn: <b>@customer.LastName</b>
+                        <br />
+                        <br />
+                        </div>
+                    <div class="col-5 text-wrap text-break">
+                        Adress:<br />
+                        @customer.Address<br />
+                        @customer.Postcode<br />
+                        @customer.City<br />
+                        Epost: @customer.Email<br />
+                        TelNr: @customer.PhoneNumber
+                        <br />
+                        <br />
+                        <b>Båtar: @customer.BoatsAmount</b>
+                        <br />
+                        <b>Båtplatser: @customer.BoatslipsAmount</b>
+                        <br />
+                        <b>VinterförvaringsPlatser: @customer.WinterstoreAmount</b>
+                        <br />
+                        <br />
+                    </div>
+                    <div class="col-2" id="btnBorderBox">
+
+                        <div class="buttons-sidebyside"> @* Container for buttons *@
+                            <div class="row">
+
+                        <div class="formbutton">
+                            <a href="/admin/blappserv/managecustomer/@customer.UserName" class="btn btn-primary">KundKort</a>
+                        </div>
+
+                        <div class="formbutton">
+                            <a href="/admin/blappserv/editboatslip/2" class="btn btn-primary">Editera BåtplatsTEST</a>
+                        </div>
+
+
+
+                          </div> @* ROW *@
+                        </div> @* Container for buttons *@
+
+                       <div class="form-sidebyside-floatclear"></div>
+                    </div> @* BorderButton Box *@
+
+                </div> @* viewTable *@
+
+            } @* Foreach *@
+
+            } @* Loading... If viewModels List is empty or not *@
+
+        } @* If viewModel is empty or not *@
+
+
+
+   
+</div>
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel = await @Service.GetAllCustomersAsync();
+
+        ViewModel.PropertyChanged += async (sender, e) => {
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        };
+        await base.OnInitializedAsync();
+    }
+
+
+    async void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedHandler;
+    }
+}

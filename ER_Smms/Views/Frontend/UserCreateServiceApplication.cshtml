@@ -1,0 +1,80 @@
+﻿@model UserCreateServiceApplicationViewModel
+
+<div>
+    @*    <h4>Skapa ny Hamn</h4>*@
+
+    <partial name="_ToastHandlerPartial" />
+
+    <div>
+        <form class="createeditforms" asp-action="UserCreateServiceApplicationSave" method="post" role="form">
+            <fieldset id="fieldsetcreateharbour">
+                <legend id="legendcreateharbour">Ansökan om Båtplats eller Vinterförvaring för din Båt:</legend>
+                @Html.AntiForgeryToken()
+
+                <label asp-for="BoatDataId"></label>
+                <br />
+                <select asp-for="BoatDataId">
+                    <option value="" disabled selected>Välj din Båt</option>
+                    @{
+                        if (Model.BoatDataListView.Count != 0)
+                        {
+                            foreach (BoatData boatData in Model.BoatDataListView)
+                            {
+                                <option value="@boatData.Id">@boatData.Label</option>
+                            }
+                        }
+                    }
+                </select>
+                <br />
+                <span id="redtext" asp-validation-for="BoatDataId"></span>
+                <br />
+                <div>
+                    <label asp-for="ServiceTypeId"></label>
+                    <br />
+                        <input asp-for="ServiceTypeId" type="radio" value="1" /> <b> Båtplats</b><br />
+                    @{
+
+                    foreach (ServiceType serviceType in Model.ServiceTypeListView)
+                    {
+                    
+                    switch(serviceType.Type)
+                    {
+                        //case "boatslip":
+                        //<input asp-for="ServiceTypeId" type="radio" value="@serviceType.Id" />
+                        //<b> Båtplats</b><br />
+                        //break;
+                    
+                        case "winterstorein":
+                        <input asp-for="ServiceTypeId" type="radio" value="@serviceType.Id" />
+                        <b> @serviceType.Label</b><br />
+                        break;
+
+                        case "winterstoreout":
+                        <input asp-for="ServiceTypeId" type="radio" value="@serviceType.Id" />
+                        <b> @serviceType.Label</b><br />
+                        break;
+
+                        case "cranelift":
+                        <input asp-for="ServiceTypeId" type="radio" value="@serviceType.Id" />
+                        <b> @serviceType.Label</b><br />
+                        break;
+
+                    } // End Switch
+
+
+                    } // End foreach
+
+                    } 
+
+                </div>
+                <br />
+                <br />
+                <input type="submit" class="btn btn-primary" name="btnFilter" value="Ansök" />
+            </fieldset>
+        </form>
+
+    </div>
+
+
+</div>
+

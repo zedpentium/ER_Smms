@@ -1,37 +1,37 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace ER_Smms.Models
 {
-    public class Boatslip
+    public class Boatslip : DateCreatedEdited
     {
-        public Boatslip(string label, int lenght, int width, int depth, string mooringType)
-        {
-            Label = label;
-            Lenght = lenght;
-            Width = width;
-            Depth = depth;
-            MooringType = mooringType;
-
-        }
-
-
         public int Id { get; set; }
 
         public string Label { get; set; }
 
-        public int Lenght { get; set; }
+        public decimal Length { get; set; }
 
-        public int Width { get; set; }
+        public decimal Width { get; set; }
 
-        public int Depth { get; set; }
+        public decimal Depth { get; set; }
 
-        public string MooringType { get; set; }
+        public int BoatDataIdRef { get; set; }
 
 
 
         public Pier Pier { get; set; }
+
+        public ServiceType ServiceType { get; set; }
+
+        public MooringType MooringType { get; set; }
+
+
+
+        [JsonIgnore]
+        public List<BoatData> BoatDatas { get; set; }
+
+        public List<ServiceHistory> ServiceHistories { get; set; }
 
     }
 

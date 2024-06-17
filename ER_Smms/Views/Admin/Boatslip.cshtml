@@ -2,62 +2,100 @@
 
 <partial name="_HarbourTopMenu" />
 
-<div id="adminboatslip">
+<div id="adminpierss">
     <h4>Hantera Båtplatser</h4>
-    <br />    
+    <br />
 
+    <partial name="_ToastHandlerPartial" />
+
+
+<div>
+    <h6>Filter: 
+    <button class="btn-dark">@Html.ActionLink($"{ViewBag.ButtonShowFreeBoatslip}",
+    "Boatslip", new {sortFilter = ViewBag.BoatslipFreeBoatslipParm })
+    </button>
+        </h6>
+</div>
+
+<br />
+    
 <div class="table-container">
     <div class="row bg-dark text-light">
-        <div class="col-1">Databas_Id</div>
-        <div class="col-3">Namn</div>
-        <div class="col-3">Info</div>
-        <div class="col-3">Hamn</div>
+@*        <div class="col-1">Id</div>*@
+        <div class="col-1">@Html.ActionLink("Nummer", "Boatslip", new { sortFilter = ViewBag.BoatslipLabelSortParm })</div>
+        <div class="col-1">Längd(m)</div>
+        <div class="col-1">Bredd(m)</div>
+        <div class="col-1">Djup(m)</div>
+        <div class="col-1">Förtöjning</div>
+        <div class="col-3">Brygga - Hamn</div>
+        <div class="col-2">@Html.ActionLink("Kundbåt", "Boatslip", new { sortFilter = ViewBag.BoatslipBoatDataSortParm })</div>
         <div class="col-2">Alternativ</div>
     </div>
-
-        @if (Model.BoatslipListView != null)
+        
+        @if (Model.BoatslipListView.Count != 0)
         {
-            @foreach (Boatslip boatslip in Model.BoatslipListView)
+            @foreach (Boatslip_DTO boatslip in Model.BoatslipListView)
             {
                 <div class="row" id="viewlisttable">
-                    <div class="col-1">@boatslip.Id</div>
-                    <div class="col-3">@boatslip.Label</div>
-                    <div class="col-3">
-                        Längd: @boatslip.Lenght
-                        <br/>
-                        Bredd: @boatslip.Width
-                        <br/>
-                        Djup: @boatslip.Depth
-                        <br/>
-                        Förtöjnings: @boatslip.MooringType
-                        </div>
-                    <div class="col-3">
+@*                    <div class="col-1">@boatslip.Id</div>*@
+                    <div class="col-1">@boatslip.Label</div>
+                    <div class="col-1">@boatslip.Length</div>
+                    <div class="col-1">@boatslip.Width</div>
+                    <div class="col-1">@boatslip.Depth</div>
+                    <div class="col-1">
+                        @if (boatslip.MooringType != null)
+                        {
+                            @boatslip.MooringType.Label
+                        }
+                    </div>
+
+                    <div class="col-3  text-wrap text-break">
                         @if (boatslip.Pier != null)
                         {
                             @boatslip.Pier.Label
-                        }
+
+                            @if (boatslip.Pier.Harbour != null)
+                            {
+                            @(" - ") @boatslip.Pier.Harbour.Label
+                            }
+                        }  
                     </div>
+
+                    <div class="col-2  text-wrap text-break">
+                        @if (boatslip.BoatData != null)
+                        {
+                            @boatslip.BoatData.Label <br /> @boatslip.BoatData.Customer.UserName
+                        }  
+                    </div>
+
                     <div class="col-2" id="btnBorderBox">
 
                         <div class="form-sidebyside"> @* Container for buttons *@
                             <div class="row">
 
                         <div class="col">
-                            <form asp-action="EditBoatslip" asp-route-id="@boatslip.Id" method="post" role="form">
+                            <form asp-action="EditBoatslip" asp-route-id="@boatslip.Id"
+                            method="post" role="form">
+
                                 @Html.AntiForgeryToken()
+
                                 <input type="submit" id="optionBtnGreen" value="Editera">
                             </form>
                         </div>
 
                         @if (User.IsInRole("SuperAdmin"))
-                         {
+                        {
                         <div class="col">
-                            <form asp-action="DeleteBoatslip" asp-route-id="@boatslip.Id" method="post" role="form" onclick="return confirm('Är du säker på att du vill radera denna Båtplats?')">
+                            <form asp-action="DeleteBoatslip" asp-route-id="@boatslip.Id"
+                            method="post" role="form"
+                            onclick="return confirm('Är du säker på att du vill radera denna Båtplats?')">
+
                                 @Html.AntiForgeryToken()
+
                                 <input type="submit" id="optionBtnRed" value="Radera">
                             </form>
                         </div>
-                         }
+                        }
 
                             </div> @* ROW *@
                         </div> @* Container for buttons *@
@@ -65,12 +103,18 @@
                         <div class="form-sidebyside-floatclear"></div>
                     </div> @* BorderButton Box *@
 
-                </div> @* viewTabel *@
+                </div> @* viewTable *@
             }
-
+        }
+        else
+        { 
+            <p>Inga Båtplatser i databasen...</p>
         }
 
+
+
 </div>
+
 
 
 </div>

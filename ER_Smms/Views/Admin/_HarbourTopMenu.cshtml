@@ -9,18 +9,43 @@
 
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
-
+                <b style="padding: 16px 8px;" class="text-light bg-dark">Skapa en ny: </b>
                 <li class="nav-item-admin">
-                    <a class="nav-link" asp-controller="Admin" asp-action="CreateHarbour">Skapa ny Hamn</a>
+                    <a class="nav-link" asp-controller="Admin" asp-action="CreateHarbour">Hamn</a>
+                </li>
+                <li class="nav-item-admin">
+                    <a class="nav-link" asp-controller="Admin" asp-action="CreatePier">Brygga</a>
+                </li>
+                <li class="nav-item-admin">
+                    <a class="nav-link" asp-controller="Admin" asp-action="CreateBoatslip">Båtplats</a>
+                </li>
+                <li class="nav-item-admin">
+                    <a class="nav-link" asp-controller="Admin" asp-action="CreateMooringType">FörtöjningsTyp</a>
                 </li>
 
-                <li class="nav-item-admin">
-                    <a class="nav-link" asp-controller="Admin" asp-action="CreatePier">Skapa ny Brygga</a>
-                </li>
+            </ul>
+        </div>
 
+    </nav>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-bottom" id="navmenubox">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <b style="padding: 16px 8px;" class="text-light bg-dark">Skapa flera nya: </b>
                 <li class="nav-item-admin">
-                    <a class="nav-link" asp-controller="Admin" asp-action="CreateBoatslip">Skapa ny Båtplats</a>
+                    <a class="nav-link" asp-controller="Admin" asp-action="CreateManyPier">Bryggor</a>
                 </li>
+                <li class="nav-item-admin">
+                    <a class="nav-link" asp-controller="Admin" asp-action="CreateManyBoatslip">Båtplatser</a>
+                </li>
+@*                <li class="nav-item-admin">
+                    <a class="nav-link" asp-controller="Admin" asp-action="CreateManyMooringType">FörtöjningsTyp</a>
+                </li>*@
 
             </ul>
         </div>

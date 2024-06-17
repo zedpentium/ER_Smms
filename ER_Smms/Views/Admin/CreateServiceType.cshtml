@@ -1,0 +1,54 @@
+﻿@model CreateServiceTypeViewModel
+
+<div id="adminharbours">
+@*    <h4>Skapa ny Hamn</h4>*@
+
+    
+
+ <div>
+                <form class="createeditforms" asp-action="CreateServiceType" method="post" role="form">
+                    <fieldset class="form-group" id="fieldsetcreateharbour">
+                    <legend id="legendcreateharbour">Skapa ny Tjänst:</legend>
+                        @Html.AntiForgeryToken()
+                        <label asp-for="ArtNr"></label>
+                        <input asp-for="ArtNr" />
+                        <br />
+                        <span id="redtext" asp-validation-for="ArtNr"></span>
+                        <br />
+                        <div>
+                            <label asp-for="Type"></label>
+                            <br />
+                            <input asp-for="Type" type="radio" value="boatslip" /> <b> Båtplats</b>
+                            <br />
+                            <input asp-for="Type" type="radio" value="winterstorein" /> <b> Inomhus VinterförvaringsPlats</b>
+                            <br />
+                            <input asp-for="Type" type="radio" value="winterstoreout" /> <b> Utomhus VinterförvaringsPlats</b>
+                            <br />
+                            <input asp-for="Type" type="radio" value="cranelift" /> <b> Kranlyft</b>
+                        </div>
+                        <span id="redtext" asp-validation-for="Type"></span>
+                        <br />
+                        <label asp-for="Label"></label>
+                        <input asp-for="Label" />
+                        <br />
+                        <span id="redtext" asp-validation-for="Label"></span>
+                        <br />
+                        <label asp-for="Price"></label>
+                        <input asp-for="Price" />
+                        <br />
+                        <span id="redtext" asp-validation-for="Price"></span>
+                        <br />
+                        <br />
+                        <input type="submit" class="btn btn-primary" name="btnFilter" value="Skapa" />
+                    </fieldset>
+                </form>
+
+        </div>
+
+
+   
+
+
+
+</div>
+                

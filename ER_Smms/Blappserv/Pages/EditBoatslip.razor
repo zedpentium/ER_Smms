@@ -1,0 +1,236 @@
+﻿@page "/admin/blappserv/editboatslip/{PageBoatslipId}"
+
+@using System.ComponentModel;
+@implements IDisposable
+@inject IBEditBoatslipViewModel ViewModel
+@inherits OwningComponentBase<BlazorAdminController>
+
+
+<div>
+        @*<form class="createeditforms" asp-action="EditBoatslipSave" method="post" role="form">*@
+            <EditForm Model="ViewModel" OnValidSubmit="SaveEditBoatslip" >
+            <div>
+            <fieldset class="form-group" id="fieldsetcreateharbour">
+                <legend id="legendcreateharbour">Editera Båtplats (ID: @ViewModel.Id)</legend>
+
+                <br />
+                <br />
+
+               @*<label asp-for="ServiceTypeId"></label>*@
+                <select id="ServiceType" @onchange="SelectedBoatslip"> @*asp-items="@(new SelectList(Model.ServiceTypeListView,"Id", "Label"))*@
+                    <option value="0" disabled selected>Välj Tjänst</option>
+                    @{
+                        if (ViewModel.ServiceTypeListView != null)
+                        {
+                            foreach (ServiceType serviceType in ViewModel.ServiceTypeListView)
+                            {
+                                if (serviceType.Id == ViewModel.ServiceTypeId)
+                                {
+                                    <option value="@serviceType.Id" selected>@serviceType.Label @serviceType.Size</option>
+                                }
+                                else
+                                {
+                                    <option value="@serviceType.Id">@serviceType.Label @serviceType.Size</option>
+                                }
+                            }
+                        }
+
+                    }
+
+                </select>
+                <br />
+                @*<span id="redtext" asp-validation-for="ServiceTypeId"></span>*@
+                <br />
+
+               <input asp-for="Id" hidden />
+                <input asp-for="BoatDataIdThatWas" hidden />
+
+                <label for="Label">Namn/Etikett</label>
+                <InputText @bind-Value="ViewModel.Label" />
+                <br />
+                <span id="redtext" asp-validation-for="Label"></span>
+                <br />
+                <label for="Length">Längd(m)</label>
+                <InputNumber @bind-Value="ViewModel.Length" />
+                <br />
+                <span id="redtext" asp-validation-for="Length"></span>
+                <br />
+                <label for="Width">Bredd(m)</label>
+                <InputNumber @bind-Value="ViewModel.Width" />
+                <br />
+                <span id="redtext" asp-validation-for="Width"></span>
+                <br />
+                <label for="Depth">Djup(m) </label>
+                <InputNumber @bind-Value="ViewModel.Depth" />
+                <br />
+                <span id="redtext" asp-validation-for="Depth"></span>
+                <br />
+
+                <label for="MooringTypeId">FörtöjningsTyp</label>
+                <CustomInputSelect @bind-Value="ViewModel.MooringTypeId">
+                    <option value="0" disabled selected>Välj Förtöjning</option>
+                    @{
+                        if (ViewModel.MooringTypeListView != null)
+                        {
+                            foreach (MooringType mooringType in ViewModel.MooringTypeListView)
+                            {
+                                if (mooringType.Id == ViewModel.MooringTypeId)
+                                {
+                                    <option value="@mooringType.Id" selected>@mooringType.Label</option>
+                                }
+                                else
+                                {
+                                    <option value="@mooringType.Id">@mooringType.Label</option>
+                                }
+                            }
+                        }
+                    }
+                </CustomInputSelect>
+                <br />
+                <span id="redtext" asp-validation-for="MooringTypeId"></span>
+                <br />
+                <label for="PierId">Välj Brygga</label>
+                <CustomInputSelect @bind-Value="ViewModel.PierId">
+                    <option value="0" disabled selected>Välj Brygga</option>
+                    @{
+                        if (ViewModel.PierListView != null)
+                        {
+                            foreach (Pier pier in ViewModel.PierListView)
+                            {
+                                if (pier.Id == ViewModel.PierId)
+                                {
+                                    <option value="@pier.Id" selected>@pier.Label - @pier.Harbour.Label</option>
+                                }
+                                else
+                                {
+                                    <option value="@pier.Id">@pier.Label - @pier.Harbour.Label</option>
+                                }
+                            }
+                        }
+                    }
+                </CustomInputSelect>
+                <br />
+                <span id="redtext" asp-validation-for="PierId"></span>
+                <br />
+                <div>
+                <label for="BoatDataId">Kunds Båt</label>
+                <CustomInputSelect @bind-Value="ViewModel.BoatDataId">
+                    <option value="0" selected>Ingen Båt</option>
+                    @{
+                        if (ViewModel.BoatDataListView != null)
+                        {
+                            foreach (BoatData boatData in ViewModel.BoatDataListView)
+                            {
+                                <option value="@boatData.Id">
+                                @boatData.Label - @boatData.Customer.UserName</option>
+
+                                //if (boatData.Id.ToString() == ViewModel.BoatDataId)
+                                //{
+                                //    <option value="@boatData.Id" selected>
+                                //    @boatData.Label - @boatData.Customer.UserName</option>
+                                //}
+                                //else
+                                //{
+                                //    <option value="@boatData.Id">
+                                //    @boatData.Label - @boatData.Customer.UserName</option>
+                                //}
+                            }
+                        }
+                    }
+                </CustomInputSelect>
+                </div>
+                <br />
+
+                <input type="submit" class="btn btn-primary"
+                name="btnFilter" value="Spara" />
+                <NavLink class="btn btn-secondary" href="admin/blappserv/" >Tillbaka</NavLink>
+            </fieldset>
+            </div>
+
+
+        </EditForm>
+
+    </div>
+
+
+
+@code {
+
+    [Parameter]
+    public string PageBoatslipId { get; set; }
+
+    // test  public string BoatslipSelected { get; set; } = " inget ";
+
+
+    void SelectedBoatslip(ChangeEventArgs e)
+    {
+        ViewModel.ServiceTypeId = Convert.ToInt32(e.Value);
+
+        ViewModel.ServiceType = ViewModel.ServiceTypeListView.Where(i => i.Id == ViewModel.ServiceTypeId).FirstOrDefault();
+        ViewModel.Length = ViewModel.ServiceType.Length;
+        ViewModel.Width = ViewModel.ServiceType.Width;
+        ViewModel.Depth = ViewModel.ServiceType.Depth;
+
+        //Random rnd = new Random();
+        //decimal randNum = rnd.Next(1, 15);
+
+        //ViewModel.Depth = randNum;
+
+        //ViewModel.SelectedBoatDataId = theID;
+
+        //if (e.Value != null)
+        //{
+        //    // "reset" the selected Boatslip and Winterspot when u change boat
+        //    ViewModel.SelectedBoatslipId = 0;
+        //    ViewModel.SelectedWinterstoreSpotId = 0;
+        //}
+    }
+
+
+    async Task SaveEditBoatslip()
+    {
+         await Service.EditBoatslipSave(ViewModel as BEditBoatslipViewModel);
+    }
+
+
+
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel = await @Service.EditBoatslipAsync(Convert.ToInt32(PageBoatslipId));
+        //ViewModel.FreeBoatslips = await @Service.GetFreeBoatslips();
+        //ViewModel.FreeWinterstoreSpots = await @Service.GetFreeWinterstoreSpots();
+
+        //ViewModel.SelectedBoatDataId = 0;
+        //ViewModel.BoatDTO = null;
+        //ViewModel.SelectedBoatslipId = 0;
+        //ViewModel.SelectedWinterstoreSpotId = 0;
+
+        ViewModel.PropertyChanged += async (sender, e) => {
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        };
+        await base.OnInitializedAsync();
+    }
+
+
+    async void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedHandler;
+    }
+
+}

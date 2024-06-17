@@ -23,17 +23,20 @@ namespace ER_Smms.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityAppUser> _signInManager;
         private readonly UserManager<IdentityAppUser> _userManager;
+        //private readonly RoleManager<IdentityAppUser> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<IdentityAppUser> userManager,
             SignInManager<IdentityAppUser> signInManager,
+            //RoleManager<IdentityAppUser> roleManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            //_roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -48,22 +51,22 @@ namespace ER_Smms.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
-            [Display(Name = "Email")]
+            [EmailAddress(ErrorMessage = "{0} måste vara en epost-adress")]
+            [Display(Name = "AnvändarNamn (epost):")]
             public string Email { get; set; }
 
 
             //Added FirstName, LastName and BirthDate /ER
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
+            [StringLength(100, ErrorMessage = "{0} måste vara minst {2} och max {1} bokstäver långt.", MinimumLength = 1)]
             [DataType(DataType.Text)]
-            [Display(Name = "First Name")]
+            [Display(Name = "Förnamn:")]
             public string FirstName { get; set; }
 
             [Required]
-            [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
+            [StringLength(30, ErrorMessage = "{0} måste vara minst {2} och max {1} bokstäver långt.", MinimumLength = 1)]
             [DataType(DataType.Text)]
-            [Display(Name = "Last Name")]
+            [Display(Name = "Efternamn:")]
             public string LastName { get; set; }
 
             //[Required]
@@ -72,15 +75,22 @@ namespace ER_Smms.Areas.Identity.Pages.Account
             //[Display(Name = "BirthDate")]
             //public string BirthDate { get; set; }
 
+            //[Required]
+            //[StringLength(30, ErrorMessage = "The {0} must be at Birthdate of at least 6 numbers.", MinimumLength = 6)]
+            //[DataType(DataType.Date)]
+            //[Display(Name = "BirthDate")]
+            //public string BirthDate { get; set; }
+
+
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0} måste vara minst {2} och max {1} tecken långt.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Lösenord:")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Bekräfta Lösenord:")]
+            [Compare("Password", ErrorMessage = "Lösenordet och bekräftelse-lösenordet är inte lika.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -101,6 +111,13 @@ namespace ER_Smms.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    //var um = new UserManager<IdentityAppUser>(
+                    //new UserStore<IdentityAppUser>(AppDbContext));
+
+                    var assignRoleresult = await _userManager.AddToRoleAsync(user, "User");
+                    //if (!result.Succeeded)
+                        //Errors(result);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

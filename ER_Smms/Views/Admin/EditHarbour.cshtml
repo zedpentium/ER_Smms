@@ -1,27 +1,13 @@
-﻿@model CreateHarbourViewModel
+﻿@model EditHarbourViewModel
 
 <div>
     <h4>Editera Hamn</h4>
 
-@{ 
-    if (ViewBag.Mess != null)
-    {
-        <script type="text/javascript">
-        cuteToast({
-                type: "@TempData["ToastType"]",
-                title: "Info",
-                message: "@ViewBag.Mess",
-                timer: 5000,
-            });
-        </Script>
-    }
-}
-
  <div>
 
                 <form class="createeditforms" asp-action="EditHarbourSave" method="post" role="form">
-                    <fieldset id="fieldsetbox">
-                    <legend id="legbox">Editera Hamn</legend>
+                    <fieldset class="form-group" id="fieldsetbox">
+                    <legend id="legbox">Editera Hamn (ID: @Model.Id)</legend>
                     @Html.AntiForgeryToken()
 
                     <input asp-for="Id" hidden />
@@ -29,18 +15,25 @@
                     <br />
                     <input asp-for="Label" required />
                     <br />
+                    <span id="redtext" asp-validation-for="Label"></span>
+                    <br />
                     <br />
                     <label asp-for="Info"></label>
                     <br />
                     <textarea asp-for="Info" required></textarea>
+                    <br />
+                    <span id="redtext" asp-validation-for="Info"></span>
 @*                    <br />
                     <label asp-for="MapURL"></label>
                     <br />
                     <input asp-for="MapURL" />*@
                     <br />
                     <br />
-                    <input type="submit" class="btn btn-primary btnWidthSeparate" name="btnFilter" value="Spara" />
-                    <input type="button" class="btn btn-secondary btnWidthSeparate" name="btnBack" value="Tillbaka" onClick="location.href='@Url.Action("Harbour", "Admin")'" />
+                    <input type="submit" class="btn btn-primary btnWidthSeparate"
+                    name="btnFilter" value="Spara" />
+                    <input type="button" class="btn btn-secondary btnWidthSeparate"
+                    name="btnBack" value="Tillbaka"
+                    onClick="location.href='@Url.Action("Harbour", "Admin")'" />
                     
                     </fieldset>
                 </form>
@@ -49,4 +42,3 @@
         </div>
 
 </div>
-                

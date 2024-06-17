@@ -1,63 +1,58 @@
-﻿using System;
+﻿using ER_Smms.Models.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using ER_Smms.Models.Interfaces;
-using ER_Smms.Models.ViewModels;
-using ER_Smms.Models;
 
 namespace ER_Smms.Models.Services
 {
     public class BoatslipService : IBoatslipService
     {
-        private readonly IBoatslipRepo _boatslipRepo;
+        private readonly IBoatslipRepo _repo;
 
-        public BoatslipService(IBoatslipRepo boatslipRepo)
+        public BoatslipService(IBoatslipRepo repo)
         {
-            _boatslipRepo = boatslipRepo;
+            _repo = repo;
         }
 
 
-        public string Create(CreateBoatslipViewModel viewModel, Pier selectedObj)
+        public async Task Create(Boatslip obj)
         {
-            Boatslip remapViewToObj = new Boatslip(
-                viewModel.Label, viewModel.Lenght, viewModel.Width,
-                viewModel.Depth, viewModel.MooringType);
-
-            string createResultMessage = _boatslipRepo.Create(remapViewToObj, selectedObj);
-
-            return createResultMessage;
-        }
-
-        public BoatslipViewModel ReadAll()
-        {
-            BoatslipViewModel listView = new BoatslipViewModel()
-            { BoatslipListView = _boatslipRepo.ReadAll() };
-
-            return listView;
-        }
-
-        public string Update(Boatslip boatslip)
-        {
-            string updateResultMessage = _boatslipRepo.Update(boatslip);
-
-            return updateResultMessage;
+            await _repo.Create(obj);
         }
 
 
-        public Boatslip FindBy(int id)
+        public async Task<List<Boatslip>> ReadAll()
         {
-            Boatslip foundObj = _boatslipRepo.Read(id);
-
-            return foundObj;
+            return await _repo.ReadAll();
         }
 
-        public bool Remove(int id)
-        {
-            Boatslip objToDelete = _boatslipRepo.Read(id);
-            bool success = _boatslipRepo.Delete(objToDelete);
 
-            return success;
+        public async Task<Boatslip> FindBy(int id)
+        {
+            return await _repo.Read(id);
+        }
+
+
+        //public async Task<List<Boatslip>> FindUserBoatslip(string id)
+        //{
+        //    return await _repo.FindUserBoatslip(id);
+        //}
+
+
+        public async Task<List<Boatslip>> ReadAllEmpty()
+        {
+            return await _repo.ReadAllEmpty();
+        }
+        
+
+        public async Task<int> Update(Boatslip obj)
+        {
+            return await _repo.Update(obj);
+        }
+
+
+        public async Task<int> Remove(int id)
+        {
+            return await _repo.Delete(await _repo.Read(id));
         }
 
     }

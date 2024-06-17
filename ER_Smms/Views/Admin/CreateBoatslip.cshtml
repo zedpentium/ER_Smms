@@ -1,35 +1,101 @@
 ﻿@model CreateBoatslipViewModel
 
 <div id="adminboatslip">
-@*    <h4>Skapa ny Hamn</h4>*@
 
-    
+
+<script>
+    function autoFillInput(elem) {
+
+        var arrayServiceTypes = JSON.parse('@Html.Raw(Json.Serialize(Model.ServiceTypeListView))');
+        var foundObj = arrayServiceTypes.find(s => s.id == elem.value);
+
+        document.getElementById("Length").value = foundObj.length.toString().replace(".", ",");
+        document.getElementById("Width").value = foundObj.width.toString().replace(".", ",");
+        document.getElementById("Depth").value = foundObj.depth.toString().replace(".", ",");
+    }
+</script>
 
  <div>
-                <form asp-action="CreatePier" method="post" role="form">
-                    <fieldset id="fieldsetcreateharbour">
+                <form class="createeditforms" asp-action="CreateBoatslip" method="post" role="form">
+                    <fieldset class="form-group" id="fieldsetcreateharbour">
                     <legend id="legendcreateharbour">Skapa ny Båtplats:</legend>
                         @Html.AntiForgeryToken()
+                        <br />
+                        <br />
+                        <label asp-for="ServiceTypeId"></label>
+                        <select asp-for="ServiceTypeId" onchange="autoFillInput(this)">
+                            <option value="0" disabled selected>Välj Tjänst</option>
+                            @{
+                                if (Model.ServiceTypeListView != null)
+                                {
+                                    foreach (ServiceType serviceType in Model.ServiceTypeListView)
+                                    {
+                                        <option value="@serviceType.Id">@serviceType.Label - @serviceType.Size</option>
+                                    }
+                                }
+                            }
+                        </select>
+                        <br />
+                        <span id="redtext" asp-validation-for="ServiceTypeId"></span>
+
+                        <br />
                         <label asp-for="Label"></label>
-                        <br />
                         <input asp-for="Label" required />
-
-
-                        <br /><br />
-                        <label asp-for="PierId"></label>
                         <br />
+                        <span id="redtext" asp-validation-for="Label"></span>
+                        <br />
+                        <br />
+                        <label asp-for="Length"></label>
+                        <input asp-for="Length" required></>
+                        <br />
+                        <span id="redtext" asp-validation-for="Length"></span>
+                        <br />
+                        <label asp-for="Width"></label>
+                        <input asp-for="Width" required></>
+                        <br />
+                        <span id="redtext" asp-validation-for="Width"></span>
+                        <br />
+                        <label asp-for="Depth"></label>
+                        <input asp-for="Depth" required></>
+                        <br />
+                        <span id="redtext" asp-validation-for="Depth"></span>
+
+                        <br />
+                        <label asp-for="MooringTypeId"></label>
+                        <select asp-for="MooringTypeId">
+                            <option value="0" disabled selected>Välj Förtöjning</option>
+                            @{
+                                    if (Model.MooringTypeListView != null)
+                                    {
+                                        foreach (MooringType mooringType in Model.MooringTypeListView)
+                                        {
+                                            <option value="@mooringType.Id">@mooringType.Label</option>
+                                        }
+                                    }
+                            }
+                        </select>
+                        <br />
+                        <span id="redtext" asp-validation-for="MooringTypeId"></span>
+                        <br />
+
+                        <label asp-for="PierId"></label>
                         <select asp-for="PierId">
-                            <option value="" disabled>Välj Hamn</option>
+                            <option value="0" disabled selected>Välj Brygga</option>
                             @{
                                     if (Model.PierListView != null)
                                     {
                                         foreach (Pier pier in Model.PierListView)
                                         {
-                                            <option value="@pier.Id">@pier.Label</option>
-                                        }
+                                            <option value="@pier.Id">@pier.Label - 
+                                    @if (pier.Harbour != null) {@pier.Harbour.Label}
+                                </option>
+                            }
                                     }
                             }
                         </select>
+                        <br />
+                        <span id="redtext" asp-validation-for="PierId"></span>
+
                         <br />
                         <br />
                         <input type="submit" class="btn btn-primary" name="btnFilter" value="Skapa" />

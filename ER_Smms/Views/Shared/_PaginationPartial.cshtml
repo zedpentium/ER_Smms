@@ -1,0 +1,49 @@
+﻿@*@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityAppUser> SignInManager
+@inject UserManager<IdentityAppUser> UserManager*@
+
+@*@{
+    var pagesCount = Math.Ceiling((decimal)Model.TotalItems / (decimal)Model.PageSize);
+    var pages = new List<int>();
+
+    for (var i = 1; i <= pagesCount; i++)
+    {
+        pages.Add(i);
+    }
+}
+
+<div>
+    <p class="d-flex justify-content-center">Page @Model.Page of @pagesCount</p>
+
+    <ul class="pagination">
+        <li class="page-item @( Model.Page == 1 ? "disabled" : "" )">
+            <a aria-label="Previous" class="page-link"
+                href="@Url.Action
+                (Model.RouteInfo.ActionName, Model.RouteInfo.ControllerName,
+                new { page = Model.Page - 1, pageSize = Model.PageSize })">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        @for (int pageNumber = 1; pageNumber <= pages.Count; pageNumber++)
+        {
+            <li class="page-item @( Model.Page == pageNumber ? "active" : "" )">
+                <a class="page-link"
+                    href="@Url.Action(Model.RouteInfo.ActionName, 
+                        Model.RouteInfo.ControllerName,
+                        new { page = pageNumber, pageSize = Model.PageSize })"> 
+                        @pageNumber </a>
+                </li>
+            }
+
+        <li class="page-item @(Model.Page == pages.Count ? "disabled" : "")">
+            <a aria-label="Next" class="page-link"
+                href="@Url.Action
+                      (Model.RouteInfo.ActionName, Model.RouteInfo.ControllerName,
+                      new { page = Model.Page + 1, pageSize = Model.PageSize })">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</div>*@

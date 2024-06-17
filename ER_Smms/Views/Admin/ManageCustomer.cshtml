@@ -1,0 +1,70 @@
+﻿@model ManageCustomerViewModel
+
+<base href="~/admin/managecustomer/" />
+
+@*<script>
+   Blazor.defaultReconnectionHandler._reconnectCallback = function(d) {
+        document.location.reload(); 
+   }
+</script>*@
+
+@*@using ER_Smms.Models.ViewModels.Admin
+@using ER_Smms.Models*@
+
+
+@*<div id="managecustomercardwrapper">
+    <h4>Hantera Kund</h4>
+    <br />
+
+    <partial name="_ToastHandlerPartial" />
+
+    <div id="customerallinfo">
+        <div class="container">
+
+            <div class="row">*@  @*Start rowwrapper*@
+
+                @*<div class="col-4">
+                    <partial name="_ManageC_CustomerInfo_Partial" />
+                </div>
+                <div class="col-4">
+                    <partial name="_ManageC_BoatInfo_Partial" />
+                </div>
+                <div class="col-4">
+                    <div id="winterspotboatinfomanage"><partial name="_ManageC_BoatInfo_WinterSpot_Partial" /></div>
+                </div>
+
+            </div>*@ @*End rowwrapper*@
+
+            <br />
+
+            @*<div class="row">*@ @*Start rowwrapper*@
+                
+@*                    <div id="downbelow_partialviews"></div>
+
+            </div>*@ @*End rowwrapper*@
+
+            @* Blazor WasM place*@
+            @*<script src="~/_framework/blazor.server.js"></script>
+            @using BlazorServerApp_Smms.Pages
+            <cust>@(await Html.RenderComponentAsync<BlazorServerApp_Smms.Pages.Counter>())</cust>*@
+
+                <app>
+                @if(@Model != null)
+                {
+                    @*<component type="typeof(ER_Smms.BlazorServer.Pages.ManageCustomer)"*@
+                    <component type="typeof(App)"
+                        render-mode="ServerPrerendered" param-ParameterViewModel="@Model" />
+
+                    <script src="_framework/blazor.server.js"></script> 
+                }
+                </app>
+
+
+
+
+        @*</div> @* End Container*@
+
+    @*</div> @* End customerallinfo*@
+
+@*</div> @*managecustomercardwrapper*@
+

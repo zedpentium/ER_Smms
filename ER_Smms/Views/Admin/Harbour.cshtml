@@ -9,29 +9,14 @@
     <h4>Hantera Hamnar</h4>
     <br />
 
-    @if (ViewBag.Mess != null)
-    {
-        <script type="text/javascript">
-
-        cuteToast({
-                type: "@TempData["ToastType"]",
-                title: "Info",
-                message: "@ViewBag.Mess",
-                timer: 5000,
-            });
-
-        // Detta Funkar :)  document.getElementById('testajsid').innerHTML = 'En text som test för js function call';
-        </Script>
-    }
+    <partial name="_ToastHandlerPartial" />
 
 
 <div class="table-container">
     <div class="row bg-dark text-light">
-        <div class="col-1">Databas_Id</div>
-        <div class="col-4">Namn</div>
+@*        <div class="col-1">Id</div>*@
+        <div class="col-5">Namn</div>
         <div class="col-5">Info</div>
-@*        <div class="col-2">City</div>
-        <div class="col-2">Country</div>*@
         <div class="col-2">Alternativ</div>
     </div>
     @if (Model.HarbourListView != null)
@@ -39,12 +24,13 @@
             @foreach (Harbour harbour in Model.HarbourListView)
             {
                 <div class="row" id="viewlisttable">
-                    <div class="col-1">@harbour.Id</div>
-                    <div class="col-4">@harbour.Label</div>
-                    <div class="col-5">@harbour.Info</div>
+@*                    <div class="col-1">@harbour.Id</div>*@
+                    <div class="col-5 text-wrap text-break">@harbour.Label</div>
+                    <div class="col-5 text-wrap text-break">@harbour.Info</div>
                     <div class="col-2" id="btnBorderBox">
 
-@*                        <form class="buttonSeparate" asp-action="AddPierView" asp-route-id="@harbour.Id" method="post" role="form" >
+@*                        <form class="buttonSeparate" asp-action="AddPierView"
+                            asp-route-id="@harbour.Id" method="post" role="form" >
                             @Html.AntiForgeryToken()
                             <input type="submit" id="optionBtnGreen" value="Bryggor">  
                         </form>*@
@@ -52,7 +38,9 @@
                             <div class="row">
 
                         <div class="col">
-                            <form asp-action="EditHarbour" asp-route-id="@harbour.Id" method="post" role="form" >
+                            <form asp-action="EditHarbour" asp-route-id="@harbour.Id"
+                            method="post" role="form" >
+
                                 @Html.AntiForgeryToken()
                                 <input type="submit" id="optionBtnGreen" value="Editera">
                             </form>
@@ -61,7 +49,10 @@
                         @if (User.IsInRole("SuperAdmin"))
                          {
                         <div class="col">
-                            <form asp-action="DeleteHarbour" asp-route-id="@harbour.Id" method="post" role="form" onclick="return confirm('Är du säker på att du vill radera denna Hamn?')">
+                            <form asp-action="DeleteHarbour" asp-route-id="@harbour.Id"
+                            method="post" role="form"
+                            onclick="return confirm('Är du säker på att du vill radera denna Hamn?')">
+
                                 @Html.AntiForgeryToken()
                                 <input type="submit" id="optionBtnRed" value="Radera">
                             </form>
@@ -74,7 +65,7 @@
                         <div class="form-sidebyside-floatclear"></div>
                     </div> @* BorderButton Box *@
 
-                </div> @* viewTabel *@
+                </div> @* viewTable *@
             }
 
         }

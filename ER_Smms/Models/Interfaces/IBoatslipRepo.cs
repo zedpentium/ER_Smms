@@ -1,21 +1,22 @@
-﻿using ER_Smms.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ER_Smms.Models.Interfaces
 {
     public interface IBoatslipRepo
     {
-        string Create(Boatslip obj, Pier selectedObj);
+        Task Create(Boatslip obj);
 
-        List<Boatslip> ReadAll();
+        Task<List<Boatslip>> ReadAll();
 
-        Boatslip Read(int id);
+        Task<Boatslip> Read(int id);
 
-        string Update(Boatslip obj);
+        //Task<List<Boatslip>> FindUserBoatslip(string id);
 
-        bool Delete(Boatslip obj);
+        Task<List<Boatslip>> ReadAllEmpty();
+
+        Task<int> Update(Boatslip obj);
+
+        Task<int> Delete(Boatslip obj);
     }
 }

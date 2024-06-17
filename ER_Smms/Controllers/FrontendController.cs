@@ -8,287 +8,401 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using ER_Smms.Models;
 using ER_Smms.Models.ViewModels;
+using ER_Smms.Models.ViewModels.Admin;
+using ER_Smms.Models.ViewModels.Frontend;
 using ER_Smms.Models.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace ER_Smms.Controllers
 {
     [Authorize(Roles = "SuperAdmin, Admin, User")]
     public class FrontendController : Controller
     {
+        private readonly IHarbourService _harbourService;
+        private readonly IPierService _pierService;
+        private readonly IBoatslipService _boatslipService;
+        private readonly IMooringTypeService _mooringTypeService;
+        private readonly IBoatDataService _boatDataService;
+        private readonly IWinterstoreSpotService _winterstoreSpotService;
+        private readonly IServiceTypeService _serviceTypeService;
+        private readonly IServiceApplicationService _serviceApplicationService;
+        private readonly IApplicantService _applicantService;
 
-        // Now using DI and theese Constructors /ER
+        private UserManager<IdentityAppUser> _userManager;
 
-        private readonly IPeopleService _peopleService;
-        private readonly ICityService _cityService;
-        private readonly ICountryService _countryService;
-        private readonly ILanguageService _languageService;
+        public FrontendController(
+            IHarbourService harbourService, IPierService pierService,
+            IBoatslipService boatslipService, IMooringTypeService mooringTypeService,
+            IBoatDataService boatDataService, IWinterstoreSpotService winterstoreSpotService,
+            IServiceTypeService serviceTypeService, IServiceApplicationService serviceApplicationService,
+            IApplicantService applicantService,
 
-        public FrontendController(IPeopleService peopleService, ICityService cityService, ICountryService countryService, ILanguageService languageService)
+            UserManager<IdentityAppUser> userMrg
+            )
         {
-            _peopleService = peopleService;
-            _cityService = cityService;
-            _countryService = countryService;
-            _languageService = languageService;
+            _harbourService = harbourService;
+            _pierService = pierService;
+            _boatslipService = boatslipService;
+            _mooringTypeService = mooringTypeService;
+            _boatDataService = boatDataService;
+            _winterstoreSpotService = winterstoreSpotService;
+            _serviceTypeService = serviceTypeService;
+            _serviceApplicationService = serviceApplicationService;
+            _applicantService = applicantService;
+
+            _userManager = userMrg;
         }
 
-        //[Authorize]
+
+
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //// CheckIfEmptyUserRoles() does not work. The RedirectToAction in this method refuses to work so, adding a button for that action!
-
-            //switch (checkDone)
-            //{
-            //    case "EMPTY":
-            //        ViewBag.Mess = "UserRoles was empty, so added Admin.";
-            //        break;
-
-            //    case "ERRORCouldNotMakeAdmin":
-            //        ViewBag.Mess = "Error! UserRole \"Admin\" could not be added, (userRoles are empty).";
-            //        break;
-
-            //    case "ROLEExist":
-            //        ViewBag.Mess = "UserRoles exists. Nothing done.";
-            //        break;
-
-            //    default:
-            //        ViewBag.Mess = "";
-            //        break;
-            //}
-
             if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
             {
                 return RedirectToAction("Index", "Admin");
             }
             else
             {
-                return View("Index");
+                IdentityAppUser customer = await _userManager.GetUserAsync(User);
+
+                //customer.BoatDatas.ForEach(boatData =>
+
+                FrontendViewModel viewModel = new FrontendViewModel()
+                { 
+                    //ListUserBoatslip = await _boatslipService.FindUserBoatslip(customer.Id),
+                    //ListUserWinterstoreSpot = await _winterstoreSpotService.FindUserWinterstoreSpot(customer.Id)
+                    Customer = customer
+                };
+
+                //if (viewModel.ListUserBoatslip.Count == 0 )
+                //{ viewModel.ListUserBoatslip = null; }
+
+                //if (viewModel.ListUserWinterstoreSpot.Count == 0)
+                //{ viewModel.ListUserWinterstoreSpot = null; }
+
+                return View("Index", viewModel);
             }
 
-            //PeopleViewModel peopleViewModel = CheckIfEmptyDBTables(); // Check if certain DB-Tables are empty. If yes, then add some.";
+        }
 
-            //CreatePersonViewModel citylist = new CreatePersonViewModel() { Cities = peopleViewModel.CityListView };
 
-            //if (TempData["Deletemess"] != null) // If there is a message set. Copy it to ViewBag.Mess
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Welcome()
+        {
+            return View("Welcome");
+        }
+
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult ApplyForBoatslip()
+        {
+
+            return View("ApplyForBoatslip");
+            //ApplyForBoatslipViewModel viewModel = new ApplyForBoatslipViewModel();
+
+            //List<Boatslip> freeBoatslipList = await _boatslipService.ReadAllEmpty();
+
+            //if (freeBoatslipList.Count != 0 || freeBoatslipList != null)
+            //{ viewModel.AreThereFreeBoatslip = true; }
+            //else { viewModel.AreThereFreeBoatslip = false; }
+
+
+            //List<ServiceApplication> applicationQueue = await _serviceApplicationService.ReadAllQueued();
+
+            //List<ServiceApplication> applicationQueueBoatslip = new List<ServiceApplication>();
+
+            //foreach (ServiceApplication item in applicationQueue)
             //{
-            //    ViewBag.Mess = TempData["Deletemess"];
-            //    TempData["Deletemess"] = null;
+            //    if (item.ServiceType.Type == "boatslip")
+            //    { applicationQueueBoatslip.Add(item); }
             //}
 
-            //return View("Index");
+            //viewModel.AmountInBoatslipQueue = applicationQueueBoatslip.Count;
+
+            //return View("ApplyForBoatslip"); //, viewModel);
         }
 
 
-
-
-        //[Authorize]
-        //[HttpPost]
-        //public IActionResult Index(PeopleViewModel peopleViewModel) //Find by model
-        //{
-        //    //PeopleViewModel peopleViewModel2 = new PeopleViewModel();
-        //    //peopleViewModel2 = peopleViewModel;
-        //    peopleViewModel = _peopleService.FindBy(peopleViewModel);
-
-        //    /*peopleViewModel2.PersonName = peopleViewModel.PersonName;
-        //    peopleViewModel2.PersonPhoneNumber = peopleViewModel.PersonPhoneNumber;
-        //    peopleViewModel2.CityListView = peopleViewModel.CityListView;*/
-
-        //    return View("Index", peopleViewModel);
-        //}
-
-
-        //[Authorize(Roles = "Admin, User")]
-        //[HttpPost]
-        //public IActionResult CreatePerson(CreatePersonViewModel createPersonViewModel) // set / HttpPost
-        //{
-
-
-        //    PeopleViewModel peopleViewModel = new PeopleViewModel();
-
-        //    List<City> cityL = _cityService.All().CityListView;
-        //    createPersonViewModel.Cities = cityL;
-
-        //    peopleViewModel.PersonName = createPersonViewModel.PersonName;
-        //    peopleViewModel.PersonPhoneNumber = createPersonViewModel.PersonPhoneNumber;
-        //    peopleViewModel.CityListView = cityL;
-
-
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        _peopleService.Add(createPersonViewModel);
-
-        //        ViewBag.Mess = "Person Added!";
-
-        //        peopleViewModel.PeopleListView = _peopleService.All().PeopleListView;
-
-        //        return View("Index", peopleViewModel);
-        //    }
-
-        //    peopleViewModel.PeopleListView = _peopleService.All().PeopleListView;
-
-        //    return View("index", peopleViewModel);
-        //}
-
-
-        //[Authorize(Roles = "Admin, User")]
-        //[HttpPost]
-        //public IActionResult DeletePerson(int id)
-        //{
-        //    _peopleService.Remove(id);
-
-        //    TempData["Deletemess"] = "Person Deleted!";
-
-        //    return RedirectToAction("Index");
-        //}
-
-
-        // ---------------  Special Actions below ---------------
-        //[Authorize]
-        //[HttpPost]
-        //public IActionResult PersonDetails(int id)
-        //{
-        //    Person personDetails = _peopleService.FindBy(id);
-
-        //    return View("Details", personDetails);
-        //}
-
-
-
-        //[Authorize(Roles = "Admin, User")]
-        //[HttpPost]
-        //public IActionResult AddLanguageView(int id)
-        //{
-        //    PersonLanguageViewModel personLanguageViewModel = new PersonLanguageViewModel()
-        //    {
-        //        LanguageListView = _languageService.All().LanguageListView,
-        //        Person = _peopleService.FindBy(id)
-        //    };
-
-        //    personLanguageViewModel = GenerateSelectList(personLanguageViewModel);
-        //    //personLanguageViewModel.LanguageListView = _languageService.All().LanguageListView;
-        //    //personLanguageViewModel.Person = foundPerson;
-
-        //    return View("AddLanguagesToPerson", personLanguageViewModel);
-        //}
-
-
-        //[Authorize(Roles = "Admin, User")]
-        //public IActionResult AddLanguageToPerson(PersonLanguageViewModel personLanguageViewModel)
-        //{
-        //    Person person = _peopleService.FindBy(personLanguageViewModel.PersonId);
-
-        //    personLanguageViewModel.LanguageListView = _languageService.All().LanguageListView;
-        //    personLanguageViewModel.Person = person;
-
-        //    personLanguageViewModel = GenerateSelectList(personLanguageViewModel);
-
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        bool success = _peopleService.AddLanguageToPerson(personLanguageViewModel);
-
-        //        if (success) { ViewBag.Mess = "Languages added to Person!"; }
-        //        else { ViewBag.Mess = "Error! Language did NOT get stored"; }
-
-        //        return View("AddLanguagesToPerson", personLanguageViewModel);
-        //    }
-
-        //    return View("AddLanguagesToPerson", personLanguageViewModel);
-        //}
-
-
-        public IActionResult AccessDenied()
+        [AllowAnonymous]
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApplyForBoatslipSave(ApplyForBoatslipViewModel viewModel)
         {
-            return View("_AccessDenied");
+            if (ModelState.IsValid)
+            {
+                viewModel.CreatedDate = DateTime.Now;
+                await _applicantService.Create(viewModel);
+
+                ServiceApplication newServApp = new ServiceApplication()
+                {
+                    ServiceType = await _serviceTypeService.FindBy(1),
+                    Applicant = await _applicantService.FindByDateTime(viewModel.CreatedDate),
+                    CreatedDate = viewModel.CreatedDate
+                };
+
+                await _serviceApplicationService.Create(newServApp);
+
+                return View("ApplyForBoatslipSuccess", "Båtplats");
+            }
+
+            return View("ApplyForBoatslip", viewModel);
         }
 
 
-        //public RedirectToActionResult CheckIfEmptyUserRoles()
-        //{
-        //    return RedirectToAction("IsRolesEmpty", "Identity");
-        //}
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult ApplyForBoatslipSuccess(string whatAppliedFor)
+        {
+            ViewBag.ApplicantType = whatAppliedFor;
+
+            return View("ApplyForBoatslipSuccess");
+        }
+
+
+
+            // ******** START - User BoatData 
+            public async Task<IActionResult> UserBoatData()
+        {
+            IdentityAppUser Customer = await _userManager.GetUserAsync(User);
+
+            BoatDataViewModel viewModel = new BoatDataViewModel()
+            { BoatDataListView = await _boatDataService.ReadAllForCurrentUser(Customer.UserName) };
+
+            ToastMessageShow();
+
+            return View("UserBoatData", viewModel);
+        }
+
+
+        [HttpGet]
+        public IActionResult UserCreateBoatData()
+        {
+            return View("UserCreateBoatData");
+        }
+
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserCreateBoatData(UserCreateBoatDataViewModel createViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                createViewModel.Customer = await _userManager.GetUserAsync(User);
+
+                if (createViewModel.Customer != null)
+                {
+                    createViewModel.CustomerId = createViewModel.Customer.Id;
+                }
+
+                createViewModel.CreatedDate = DateTime.Now;
+
+                //string resultMessage = _boatDataService.Create(createViewModel);
+                await _boatDataService.Create(createViewModel);
+
+                //if (resultMessage == "success")
+                //{
+                //    TempData["ToastType"] = "success";
+                //}
+                //else
+                //{
+                //    TempData["ToastType"] = "error";
+                //}
+
+                ToastMessageInput("success", "", "Ny Båt är Skapad" );
+
+                return RedirectToAction("UserBoatData");
+            }
+            else
+            {
+                return View("UserCreateBoatData", createViewModel);
+            }
+
+        }
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEditBoatData(int id)
+        {
+            UserEditBoatDataViewModel objFromDb = await _boatDataService.FindBy(id);
+
+            objFromDb.CustomerId = objFromDb.Customer.Id;
+
+            IdentityAppUser customer = await _userManager.GetUserAsync(User);
+
+            if (customer.Id != objFromDb.CustomerId)
+            {
+                ToastMessageInput("error", "", "Detta är inte din Båt!");
+
+                return RedirectToAction("UserBoatData");
+            }
+            else
+            {
+                return View("UserEditBoatData", objFromDb);
+            }
+        }
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEditBoatDataSave(UserEditBoatDataViewModel createViewModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                IdentityAppUser Customer = await _userManager.GetUserAsync(User);
+
+                if (Customer.Id != createViewModel.CustomerId)
+                {
+                    ToastMessageInput("error", "", "Detta är inte din Båt!");
+
+                    return RedirectToAction("UserBoatData");
+                }
+
+                createViewModel.UpdatedDate = DateTime.Now;
+
+                //string resultMessage = _boatDataService.Update(createViewModel);
+
+                await _boatDataService.Update(createViewModel);
+
+                ToastMessageInput("success", "", "Editering av Båt Sparad");
+
+
+                return RedirectToAction("UserBoatData");
+            }
+
+            return View("UserEditBoatData", createViewModel);
+        }
+
+
+        // ******** END - User BoatData 
+
+
+
+
+        // ******* START - Applications for Boatslip, Winterstore etc ********
+
+        public async Task<IActionResult> UserServiceApplications()
+        {
+            IdentityAppUser customer = await _userManager.GetUserAsync(User);
+
+            UserServiceApplicationViewModel viewModel = new UserServiceApplicationViewModel()
+            { 
+                UserServiceApplicationListView = await _serviceApplicationService.ReadAllForCurrentUser(customer.UserName)
+            };
+
+            ToastMessageShow();
+
+            return View("UserServiceApplication", viewModel);
+        }
+
+
+        public async Task<IActionResult> UserCreateServiceApplication()
+        {
+            IdentityAppUser Customer = await _userManager.GetUserAsync(User);
+
+            UserCreateServiceApplicationViewModel createViewModel = new UserCreateServiceApplicationViewModel()
+            {
+                BoatDataListView = await _boatDataService.ReadAllForCurrentUser(Customer.UserName),
+                ServiceTypeListView = await _serviceTypeService.ReadAll()
+            };
+
+            ToastMessageShow();
+
+            return View("UserCreateServiceApplication", createViewModel);
+        }
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserCreateServiceApplicationSave(UserCreateServiceApplicationViewModel createViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                createViewModel.Customer = await _userManager.GetUserAsync(User);
+                createViewModel.BoatData = await _boatDataService.FindBy(createViewModel.BoatDataId);
+                createViewModel.InQueue = 0;
+                createViewModel.CreatedDate = DateTime.Now;
+                createViewModel.ServiceType = await _serviceTypeService.FindBy(createViewModel.ServiceTypeId);
+
+
+                // Start check IF exist - with this boat and service
+                UserServiceApplicationViewModel customerServAppList = new UserServiceApplicationViewModel()
+                {
+                    UserServiceApplicationListView =
+                        await _serviceApplicationService.ReadAllForCurrentUser(createViewModel.Customer.UserName)
+                };
+
+                foreach (var item in customerServAppList.UserServiceApplicationListView)
+                {
+                    if (item.BoatData == createViewModel.BoatData &&
+                        item.ServiceType == createViewModel.ServiceType)
+                    {
+                        ToastMessageInput("error", "", "Ansökan finns redan! Med denna båt och tjänst.");
+
+                        return RedirectToAction("UserCreateServiceApplication");
+                    }
+                }
+                // End of check IF exist
+
+                await _serviceApplicationService.Create(createViewModel);
+
+                ToastMessageInput("success", "", "Ansökan Skapad");
+
+                return RedirectToAction("UserServiceApplications");
+            }
+            else
+            {
+                return View("UserCreateServiceApplication", createViewModel);
+            }
+
+        }
+
+
+
+        // ******* END - Applications for Boatslip, Winterstore etc ********
+
+
+
+        // Error handling view
+
+        public IActionResult CatchShowError(string message)
+        {
+            FrontendViewModel viewModel = new FrontendViewModel();
+            viewModel.ErrorMessageInfo = message;
+            return View("ErrorHandleShowInfo", viewModel);
+        }
 
 
         // -------------- Normal Methods below -------------------
 
-        //public PeopleViewModel CheckIfEmptyDBTables()
-        //{
-        //    PeopleViewModel peopleViewModel = new PeopleViewModel()
-        //    {
-        //        PeopleListView = _peopleService.All().PeopleListView,
-        //        CityListView = _cityService.All().CityListView,
-        //        CountryListView = _countryService.All().CountryListView,
-        //        LanguageListView = _languageService.All().LanguageListView
-        //    };
-
-        //    if (peopleViewModel.LanguageListView.Count == 0 || peopleViewModel.LanguageListView == null)
-        //    {
-        //        _languageService.CreateBaseLanguages();
-        //        ViewBag.BaseLanguageList = "Language-table was empty, added languages into it. ";
-        //        peopleViewModel.LanguageListView = _languageService.All().LanguageListView;
-        //    }
-
-        //    if (peopleViewModel.CountryListView.Count == 0 || peopleViewModel.CountryListView == null)
-        //    {
-        //        _countryService.CreateBaseCountries();
-        //        ViewBag.BaseCountryList = "Country-table was empty, added cities into it. ";
-        //        peopleViewModel.CountryListView = _countryService.All().CountryListView;
-        //    }
-
-        //    if (peopleViewModel.CityListView.Count == 0 || peopleViewModel.CityListView == null)
-        //    {
-        //        _cityService.CreateBaseCities(peopleViewModel.CountryListView);
-        //        ViewBag.BaseCityList = "City-table was empty, added cities into it, and a country per city. ";
-        //        peopleViewModel.CityListView = _cityService.All().CityListView;
-        //    }
-
-        //    if (peopleViewModel.PeopleListView.Count == 0 || peopleViewModel.PeopleListView == null)
-        //    {
-        //        _peopleService.CreateBasePeople(peopleViewModel.CityListView);
-        //        ViewBag.BasePersonList = "Person-table was empty, added peoples into it. ";
-        //        peopleViewModel.PeopleListView = _peopleService.All().PeopleListView;
-        //    }
-
-        //    return peopleViewModel;
-
-        //}
 
 
-        //public PersonLanguageViewModel GenerateSelectList(PersonLanguageViewModel personLanguageViewModel)
-        //{
-        //    List<Language> listPeronsLang = new List<Language>(); // list to add languages that a person might have allready
-        //    List<SelectListItem> generatedList = new List<SelectListItem>();
-
-        //    foreach (PersonLanguage language in personLanguageViewModel.Person.PersonLanguages.ToList())
-        //    {
-        //        listPeronsLang.Add(language.Language);
-        //    }
-
-        //    bool IsSelected; // to hold true or false for those languages a person might allready have
-
-        //    foreach (Language languageItem in personLanguageViewModel.LanguageListView)
-        //    {
-        //        Language personLangID = listPeronsLang.Find(id => id.LanguageId == languageItem.LanguageId);
-
-        //        if (personLangID != null) // IsSelected is True if equal, false if not equal
-        //        { IsSelected = languageItem.LanguageId == personLangID.LanguageId; }
-        //        else { IsSelected = false; }
-
-        //        SelectListItem selectList = new SelectListItem()
-        //        {
-        //            Text = languageItem.LanguageName,
-        //            Value = languageItem.LanguageId.ToString(),
-        //            Selected = IsSelected
-        //        };
-        //        generatedList.Add(selectList);
-        //    }
-        //    personLanguageViewModel.LanguageSelectList = generatedList;
-
-        //    return personLanguageViewModel;
-        //}
+        // ---  ToastMessage Handler and show
 
 
+        public void ToastMessageShow()
+        {
+            if (TempData["ToastMessage"] != null) // If message is set. Set ViewBags, to display in returned view 
+            {
+                ViewBag.ToastType = TempData["ToastType"];
+                ViewBag.ToastTitle = TempData["ToastTitle"];
+                ViewBag.ToastMessage = TempData["ToastMessage"];
+
+                TempData["ToastMess"] = null;
+            }
+        }
+
+
+        public void ToastMessageInput(string type = null, string title = null, string message = null)
+        {
+            TempData["ToastType"] = type; // Types can only be success, warning or error
+            TempData["ToastTitle"] = title;
+            TempData["ToastMessage"] = message;
+
+            // Put the code-line below in views where you want toastmessages "popups" /Eric R
+            // <partial name="_ToastHandlerPartial" />  
+        }
 
 
     }

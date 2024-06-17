@@ -1,0 +1,277 @@
+﻿@using Microsoft.AspNetCore.Routing
+
+@*@inject LinkGenerator LinkGenerator*@
+@inherits OwningComponentBase<ManageCustomerService>
+
+@if (ViewModel?.CustomerAllInfo == null)
+{
+    <div class="loadspinner"></div>
+    <p><em>Loading...</em></p>
+}
+else
+{
+<div class="col-12">
+<div class="row">
+@*    <h6>Kund-Uppgifter</h6>
+    <br />
+    <br />*@
+    </div>
+    <AuthorizeView Roles="SuperAdmin">
+    <p>Du är superuser!</p>
+    </AuthorizeView>
+
+<div class="border border-3 bg-secondary border-primary rounded-3 m-0 p-1">
+    <div class="row border border-2 bg-secondary border-primary rounded-3 m-0">
+        <div class="fixedcolcustomerinfolabels">
+            FörNamn:  <br />
+            EfterNamn: <br />
+            Adress: <br />
+            PostNummer: <br />
+            Stad: <br />
+            Telefon: <br />
+            Epost: <br /><br />
+            Login: <br />
+        </div>
+
+        <div class="col">
+            <b>
+                @ViewModel.CustomerAllInfo.FirstName <br />
+                @ViewModel.CustomerAllInfo.LastName  <br />
+                @ViewModel.CustomerAllInfo.Address  <br />
+                @ViewModel.CustomerAllInfo.Postcode  <br />
+                @ViewModel.CustomerAllInfo.City  <br />
+                @ViewModel.CustomerAllInfo.PhoneNumber  <br />
+                @ViewModel.CustomerAllInfo.Email  <br /><br />
+                @ViewModel.CustomerAllInfo.UserName  <br />
+            </b> <br />
+        </div>
+    </div>
+
+<div class="border border-0 bg-secondary border-primary rounded-3 m-0 p-1">
+    <button class="btn btn-secondary" @onclick="EditCustomer">Editera Kunduppgifter</button>
+</div>
+
+
+</div> @* End Col-12 *@
+
+<br /><br />
+
+
+</div> @* End styled borderframe *@
+
+    @if (ShowPopup)
+    {
+        <!-- This is the popup to edit -->
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content border border-2 bg-secondary border-primary rounded-3 m-0 p-1">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Editera Kund</h3>
+
+                        <!-- Button to close the popup -->
+
+                <button type="button" class="close"
+                        @onclick="ClosePopup">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                    </div>
+
+                    <!-- Edit form for the current customer -->
+
+            <div class="modal-body border border-3 bg-secondary border-primary rounded-3">
+                        <EditForm Model="ViewModel" OnValidSubmit="SaveEditCustomer" style="width:1000px;"
+                        class="border border-1 bg-primary border-primary rounded-3 m-0 p-0">
+                            <DataAnnotationsValidator />
+                            <div class="form-group row">
+                                <label for="FirstName" class="col-md-2 col-form-label">Förnamn:</label>
+                                <div class="col-md-4">
+                                    <InputText id="FirstName" class="form-control" @bind-Value="ViewModel.CustomerAllInfo.FirstName" />
+                                    <ValidationMessage For="@(() => ViewModel.CustomerAllInfo.FirstName)" />
+                                </div>
+                                <div class="col-1"></div>
+                                <label for="LastName" class="col-md-2 col-form-label">Efternamn:</label>
+                                <div class="col-md-3">
+                                    <InputText id="LastName" class="form-control" @bind-Value="ViewModel.CustomerAllInfo.LastName" />
+                                    <ValidationMessage For="@(() => ViewModel.CustomerAllInfo.LastName)" />
+                                </div>
+                            </div>
+                                <div class="form-group row">
+                                <label for="PhoneNumber" class="col-md-2 col-form-label">Telefon:</label>
+                                <div class="col-md-10">
+                                    <InputText id="PhoneNumber" class="form-control" @bind-Value="ViewModel.CustomerAllInfo.PhoneNumber" />
+                                    <ValidationMessage For="@(() => ViewModel.CustomerAllInfo.PhoneNumber)" />
+                                </div>
+                            </div>
+                                <div class="form-group row">
+                                <label for="Address" class="col-md-2 col-form-label">Adress:</label>
+                                <div class="col-md-4">
+                                    <InputText id="Address" class="form-control" @bind-Value="ViewModel.CustomerAllInfo.Address" />
+                                    <ValidationMessage For="@(() => ViewModel.CustomerAllInfo.Address)" />
+                                </div>
+                                <div class="col-1"></div>
+                                <label for="Postcode" class="col-md-2 col-form-label">Postnummer:</label>
+                                <div class="col-md-3">
+                                    <InputNumber id="Postcode" class="form-control" @bind-Value="ViewModel.CustomerAllInfo.Postcode" />
+                                    <ValidationMessage For="@(() => ViewModel.CustomerAllInfo.Postcode)" />
+                                </div>
+                            </div>
+                                <div class="form-group row">
+                                <label for="City" class="col-md-2 col-form-label">Stad:</label>
+                                <div class="col-md-10">
+                                    <InputText id="City" class="form-control" @bind-Value="ViewModel.CustomerAllInfo.City" />
+                                    <ValidationMessage For="@(() => ViewModel.CustomerAllInfo.City)" />
+                                </div>
+                            </div>
+                                <div class="form-group row">
+                                <label for="Email" class="col-md-2 col-form-label">Epost:</label>
+                                <div class="col-md-10">
+                                    <InputText id="Email" class="form-control" @bind-Value="ViewModel.CustomerAllInfo.Email" />
+                                    <ValidationMessage For="@(() => ViewModel.CustomerAllInfo.Email)" />
+                                </div>
+                            </div>
+                                <div class="form-group row">
+                                <label for="ExtraInfoTextarea" class="col-md-2 col-form-label">Extra Info:</label>
+                                <div class="col-md-10">
+                                    <InputTextAreaCKEditor @bind-Value="ViewModel.CustomerAllInfo.ExtraInfoTextarea" class="form-control form-control-solid form-control-lg"></InputTextAreaCKEditor>
+                                    @*<InputTextAreaCKEditor @bind-Value="ViewModel.CustomerAllInfo.ExtraInfoTextarea" class="form-control form-control-solid form-control-lg"></InputTextAreaCKEditor>*@
+                                    @*<InputTextArea id="ExtraInfoTextarea" class="form-control" @bind-Value="ViewModel.CustomerAllInfo.ExtraInfoTextarea" />*@
+                                    <ValidationMessage For="@(() => ViewModel.CustomerAllInfo.ExtraInfoTextarea)" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <button type="submit" class="btn btn-success">Spara</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <!-- Button to close popup -->
+                                    <button class="btn btn-success"
+                                    @onclick="ClosePopup">
+                                    Stäng
+                                    </button>
+                                </div>
+                            </div>
+                        </EditForm>
+
+@*                       <label asp-for="UserName" class="col-sm-2 col-form-label"></label> 
+                        <input class="form-control" type="text"
+                       placeholder="First Name"
+                       @bind="ViewModel.CustomerAllInfo.FirstName" />
+
+                        <input class="form-control" type="text"
+                       placeholder="Last Name"
+                       @bind="ViewModel.CustomerAllInfo.LastName" />
+
+                        <br />*@
+
+                        <!-- Button to save the edit -->
+
+@*                <button class="btn btn-success"
+                        @onclick="SaveEditCustomer">
+                            Spara
+                        </button>&nbsp;*@
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+
+}
+
+
+
+@code {
+
+    [CascadingParameter(Name = "ViewModel")]
+    IBManageCustomerViewModel ViewModel { get; set; }
+
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+
+    bool ShowPopup = false;
+
+    async Task EditCustomer()
+    {
+        ShowPopup = true;
+        //await Service.ToastMessageInputAndShow();
+
+        //JSRuntime.InvokeVoidAsync("setAndShowToast", "success", "testför at se", "meddelande hameen see", 7000);
+
+        await JSRuntime.InvokeVoidAsync("setAndShowToast", "success", "testa", "bööööös", 7000);
+    }
+
+
+    void ClosePopup()
+    {
+        // Close the Popup
+        ShowPopup = false;
+    }
+
+
+
+    //void AddNewForecast()
+    //{
+    //    // Make new forecast
+    //    objWeatherForecast = new WeatherForecast();
+
+    //    // Set Id to 0 so we know it is a new record
+    //    //objWeatherForecast.Id = 0;
+
+    //    // Open the Popup
+    //    ShowPopup = true;
+    //}
+
+
+    async Task SaveEditCustomer()
+    {
+        var result = await @Service.SaveEditCustomerAsync(ViewModel);
+
+        // Close the Popup
+        ShowPopup = false;
+    }
+
+
+
+    // A new forecast will have the Id set to 0
+
+        //if (objWeatherForecast.Id == 0)
+        //{
+        //    // Create new forecast
+
+        //    WeatherForecast objNewWeatherForecast = new WeatherForecast();
+
+        //    objNewWeatherForecast.Date = System.DateTime.Now;
+
+        //    objNewWeatherForecast.Summary = objWeatherForecast.Summary;
+
+        //    objNewWeatherForecast.TemperatureC =
+
+        //    //Convert.ToInt32(objWeatherForecast.TemperatureC);
+
+        //    //objNewWeatherForecast.TemperatureF =
+
+        //    //Convert.ToInt32(objWeatherForecast.TemperatureF);
+
+        //    //objNewWeatherForecast.UserName = UserIdentityName;
+
+        //    // Save the result
+
+        //    var result = @Service.CreateForecastAsync(objNewWeatherForecast);
+
+        //}
+        //else
+        //{
+        //    // This is an update
+        //}
+
+        //// Get the forecasts for the current user
+
+        //forecasts = await @Service.GetForecastAsync(UserIdentityName);
+    //}
+
+}
+
+

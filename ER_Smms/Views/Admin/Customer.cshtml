@@ -1,0 +1,136 @@
+﻿@*@model CustomerListViewModel*@
+
+
+@*<base href="/admin/customer/" />
+
+<app>
+<component type="typeof(ER_Smms.App)" render-mode="ServerPrerendered" />
+</app>
+
+<div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+
+<script src="_framework/blazor.server.js"></script> *@
+
+<partial name="_ToastHandlerPartial" />
+
+
+
+
+
+
+
+
+
+@*<div id="adminharbours">
+    <h4>Kund-Lista</h4>
+    <br />
+
+
+
+
+<div class="table-container">
+    <div class="row bg-dark text-light">
+        <div class="col-5">Namn</div>
+        <div class="col-5">Info</div>
+        <div class="col-2">Alternativ</div>
+    </div>
+    @if (Model.CustomerAllInfoListView != null)
+        {
+            @foreach (CustomerAllInfoDTO customer in Model.CustomerAllInfoListView)
+            {
+                <div class="row" id="viewlisttable">
+                    <div class="col-5 text-wrap text-break">
+                        UserName: <b>@customer.UserName</b><br />
+                        Förnamn: <b>@customer.FirstName</b><br />
+                        EfterNamn: <b>@customer.LastName</b>
+                        <br />
+                        <br />
+                        </div>
+                    <div class="col-5 text-wrap text-break">*@
+@*                        Adress:<br />
+                        @customer.Address<br />
+                        @customer.Postcode<br />
+                        @customer.City<br />
+                        Epost: @customer.Email<br />
+                        TelNr: @customer.PhoneNumber
+                        <br />
+                        <br />*@
+                        @*<b>Båtar: @customer.BoatsAmount</b>
+                        <br />
+                        <b>Båtplatser: @customer.BoatslipsAmount</b>
+                        <br />
+                        <b>VinterförvaringsPlatser: @customer.WinterstoreAmount</b>
+                        <br />
+                        <br />
+                    </div>
+                    <div class="col-2" id="btnBorderBox">
+
+                        <div class="buttons-sidebyside"> @* Container for buttons *@
+                            @*<div class="row">
+
+                        <div class="formbutton">
+                            <form asp-controller="Admin" asp-action="ManageCustomer" asp-route-id="@customer.UserName"
+                            method="post" role="form" >
+
+                                @Html.AntiForgeryToken()
+                                <input type="submit" id="optionBtnGreen" value="KundKort">
+                            </form>
+                        </div>*@
+
+@*                        <div class="formbutton">
+                            <form asp-controller="Identity" asp-action="EditCustomer" asp-route-id="@customer.UserName"
+                            method="post" role="form" >
+
+                                @Html.AntiForgeryToken()
+                                <input type="submit" id="optionBtnGreen" value="Editera KundInfo">
+                            </form>
+                        </div>*@
+
+
+@*                        <div class="col">
+                            <form asp-controller="Identity" asp-action="EditCustomer" asp-route-id="@customer.Id"
+                            method="post" role="form" >
+
+                                @Html.AntiForgeryToken()
+                                <input type="submit" id="optionBtnGreen" value="Editera">
+                            </form>
+                        </div>
+
+                    @if (User.IsInRole("SuperAdmin"))
+                         {
+                        <div class="col">
+                            <form asp-action="DeleteCustomer" asp-route-id="@customer.Id"
+                            method="post" role="form"
+                            onclick="return confirm('Är du säker på att du vill radera denna Kund?')">
+
+                                @Html.AntiForgeryToken()
+                                <input type="submit" id="optionBtnRed" value="Radera">
+                            </form>
+                        </div>*@
+
+                           @* </div>*@ @* ROW *@
+                        @*</div>*@ @* Container for buttons *@
+
+                       @*<div class="form-sidebyside-floatclear"></div>*@
+                    @*</div> @* BorderButton Box *@
+
+               @* </div> @* viewTable *@
+       @*     }
+
+        }
+
+
+</div>
+   
+</div>*@
+                

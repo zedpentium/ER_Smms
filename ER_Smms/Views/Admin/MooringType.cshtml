@@ -1,0 +1,72 @@
+﻿@model MooringTypeViewModel
+
+@*@inject SignInManager<IdentityAppUser> SignInManager
+@inject UserManager<IdentityAppUser> UserManager*@
+
+<partial name="_HarbourTopMenu" />
+
+<div id="adminharbours">
+    <h4>Hantera FörtöjningsTyper</h4>
+    <br />
+
+<partial name="_ToastHandlerPartial" />
+
+
+<div class="table-container">
+    <div class="row bg-dark text-light">
+@*        <div class="col-1">Databas_Id</div>*@
+        <div class="col-5">Namn</div>
+        <div class="col-5">Info</div>
+        <div class="col-2">Alternativ</div>
+    </div>
+    @if (Model.MooringTypeListView != null)
+        {
+            @foreach (MooringType mooringType in Model.MooringTypeListView)
+            {
+                <div class="row" id="viewlisttable">
+@*                    <div class="col-1">@mooringType.Id</div>*@
+                    <div class="col-5">@mooringType.Label</div>
+                    <div class="col-5 text-wrap text-break">@mooringType.Info</div>
+                    <div class="col-2" id="btnBorderBox">
+
+                        <div class="form-sidebyside"> @* Container for buttons *@
+                            <div class="row">
+
+                        <div class="col">
+                            <form asp-action="EditMooringType" asp-route-id="@mooringType.Id"
+                            method="post" role="form" >
+
+                                @Html.AntiForgeryToken()
+                                <input type="submit" id="optionBtnGreen" value="Editera">
+                            </form>
+                        </div>
+
+                        @if (User.IsInRole("SuperAdmin"))
+                         {
+                        <div class="col">
+                            <form asp-action="DeleteMooringType" asp-route-id="@mooringType.Id"
+                            method="post" role="form"
+                            onclick="return confirm('Är du säker på att du vill radera denna FörtöjningsTyp?')">
+
+                                @Html.AntiForgeryToken()
+                                <input type="submit" id="optionBtnRed" value="Radera">
+                            </form>
+                        </div>
+                         }
+
+                            </div> @* ROW *@
+                        </div> @* Container for buttons *@
+
+                        <div class="form-sidebyside-floatclear"></div>
+                    </div> @* BorderButton Box *@
+
+                </div> @* viewTable *@
+            }
+
+        }
+
+
+</div>
+   
+</div>
+                

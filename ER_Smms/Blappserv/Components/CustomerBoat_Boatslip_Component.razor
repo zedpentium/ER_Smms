@@ -1,0 +1,186 @@
+﻿@using System.ComponentModel;
+
+@inherits OwningComponentBase<ManageCustomerService>
+
+<div> @* Pagewrapper *@
+
+
+@* ---------  If functions to determen what to show or not -------------*@
+
+
+@if (ViewModel.SelectedBoatDataId > 0) // Boatslip info
+{
+    if (ViewModel.BoatDTO.Boatslip != null)
+    {
+
+        Boatsliplabel = ViewModel.BoatDTO.Boatslip.Label +
+            " - Mått: L: " + ViewModel.BoatDTO.Boatslip.Length + " B: " +
+            ViewModel.BoatDTO.Boatslip.Width + " D: " + ViewModel.BoatDTO.Boatslip.Depth;
+
+        Pierlabel = ViewModel.BoatDTO.Boatslip.Pier.Label;
+
+        DeleteBtnBoatslip = @"<form asp-action=""RemoveBoatslipForSelectedBoat"" asp-route-id=""@ViewModel.BoatDTO.Id""
+                            method=""post"" role=""form""
+                            onclick=""return confirm('Är du säker på att du vill ta bort båtplats för denna båt?')"">
+                            <input type=""submit"" id=""optionBtnRed"" value=""Ta Bort"">
+                            </form>";
+    }
+    else
+    {
+        Boatsliplabel = " - ";
+        Pierlabel = " - ";
+        DeleteBtnBoatslip = "";
+    }
+
+
+
+}
+else
+{
+    
+}
+@* -------- END of IF checks -----------  *@
+
+
+
+
+
+<div class="border border-1 bg-secondary border-primary rounded-3 p-1">
+    <div class="row gx-5">
+        <div>  @* Contain box *@
+            <div class="bg-dark text-light"> <b>&nbsp;Valda båtens Båtplats:</b> </div>
+
+                <div class="row">
+                    <div class="col-3">
+                        <b>Plats/Nr: </b>
+                        <br />
+                        <b>Brygga: </b>
+                        <br />
+                    </div>
+                    <div class="col">
+
+                        <b>@Boatsliplabel</b>
+                        <br />
+                        <b>@Pierlabel</b>
+                        <br />
+                    </div>
+                </div> @* end Row *@
+
+                    <div>
+                        @((MarkupString)DeleteBtnBoatslip)
+                    </div>
+
+
+        </div> @* End Contain box*@
+    </div> @* End Row*@
+</div> @* End BorderDiv *@
+
+<br />
+
+<div class="border border-1 bg-secondary border-primary rounded-3 p-1">
+
+    <div class="row">
+
+        <div> @* Contain box *@
+
+            <div class="bg-dark text-light"> <b>&nbsp;Tilldela/Byta Båtplats: </b> </div>
+
+                @if (ViewModel.SelectedBoatDataId > 0)
+                {
+                    @if (ViewModel.FreeBoatslips != null)
+                    {
+                        <EditForm Model="ViewModel" OnValidSubmit="SaveEditBoatslip">
+                            <select asp-for="SelectedBoatslipId" @onchange="SelectedBoatslip">
+                                <option value="0" disabled selected>Välj en Ledig BåtPlats</option>
+                                @foreach (Boatslip freeboatslip in ViewModel.FreeBoatslips)
+                                {
+                                    <option value="freeboatslip.Id">NR: @freeboatslip.Label - Mått: 
+                                        L: @freeboatslip.Length B: @freeboatslip.Width
+                                        D: @freeboatslip.Depth - @freeboatslip.Pier.Label</option>
+                                }
+                            </select>
+                            <input asp-for="SelectedBoatDataId" hidden />
+                            <br />
+                            <br />
+                            <div>
+                                <input type="submit" id="optionBtnGreen" value="Tilldela Vald Båtplats">
+                            </div>
+                        </EditForm>
+                    }
+                    else
+                    {
+                        <p>Inga Lediga VinterförvaringsPlatser.</p>
+                    }
+
+                }
+                else
+                { <p>Ingen båt är vald.</p> }
+
+
+
+        </div> @* End Contain box*@
+        <br />
+    </div> @* End Row*@
+
+</div> @* End BorderDiv *@
+
+
+</div>
+
+
+
+@code{
+
+    [CascadingParameter(Name = "ViewModel")]
+    IBManageCustomerViewModel ViewModel { get; set; }
+
+    private string DeleteBtnBoatslip { get; set; }
+    private string SelectABoatslip { get; set; }
+    private string Boatsliplabel { get; set; }
+    private string Pierlabel { get; set; }
+
+
+    void SelectedBoatslip(ChangeEventArgs e)
+    {
+        //int theID = Convert.ToInt32(e.Value);
+        //ViewModel.BoatDTO = ViewModel.CustomerAllInfo.BoatDatas.Where(i => i.Id == theID).FirstOrDefault();
+        ViewModel.SelectedBoatslipId = 5; //Convert.ToInt32(e.Value); //theID;
+    }
+    
+
+    async Task SaveEditBoatslip()
+    {
+        //var result = 
+        await Service.ManageCustomerSaveAssignedBoatslip(ViewModel);
+
+        // Close the Popup
+        //ShowPopup = false;
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel.PropertyChanged += async (sender, e) => {
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        };
+        await base.OnInitializedAsync();
+    }
+
+
+    async void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedHandler;
+    }
+}

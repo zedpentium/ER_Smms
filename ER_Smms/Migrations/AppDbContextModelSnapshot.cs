@@ -19,6 +19,114 @@ namespace ER_Smms.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("ER_Smms.Models.Applicant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BrandModel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Depth")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExtraInfoTextarea")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Length")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Width")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Applicants");
+                });
+
+            modelBuilder.Entity("ER_Smms.Models.BoatData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BoatPictureURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BoatslipId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BrandModel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Depth")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("HaveInsurance")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Height")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("InsuranceURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Label")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Length")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("decimal(7,2)");
+
+                    b.Property<decimal>("Width")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int?>("WinterstoreSpotId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BoatslipId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("WinterstoreSpotId");
+
+                    b.ToTable("BoatDatas");
+                });
+
             modelBuilder.Entity("ER_Smms.Models.Boatslip", b =>
                 {
                     b.Property<int>("Id")
@@ -26,64 +134,45 @@ namespace ER_Smms.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Depth")
+                    b.Property<int>("BoatDataIdRef")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Depth")
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<string>("Label")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Lenght")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Length")
+                        .HasColumnType("decimal(5,2)");
 
-                    b.Property<string>("MooringType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("MooringTypeId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PierId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Width")
+                    b.Property<int?>("ServiceTypeId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Width")
+                        .HasColumnType("decimal(5,2)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MooringTypeId");
+
                     b.HasIndex("PierId");
 
+                    b.HasIndex("ServiceTypeId");
+
                     b.ToTable("Boatslips");
-                });
-
-            modelBuilder.Entity("ER_Smms.Models.City", b =>
-                {
-                    b.Property<int>("CityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CityName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CityId");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("ER_Smms.Models.Country", b =>
-                {
-                    b.Property<int>("CountryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CountryName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CountryId");
-
-                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("ER_Smms.Models.Harbour", b =>
@@ -93,6 +182,9 @@ namespace ER_Smms.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Info")
                         .HasColumnType("nvarchar(max)");
 
@@ -101,6 +193,9 @@ namespace ER_Smms.Migrations
 
                     b.Property<string>("MapURL")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -131,6 +226,9 @@ namespace ER_Smms.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ExtraInfoTextarea")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
@@ -185,122 +283,24 @@ namespace ER_Smms.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "0fc7006f-1864-4244-958d-a4cf378298a5",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "a23a8037-e116-4e06-876a-cb43fe346fee",
-                            Email = "superadmin@email.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "SUPERADMIN@EMAIL.COM",
-                            NormalizedUserName = "SUPERADMIN@EMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOm/Tt/orkL0XD8dHZMe/BcS7ejzIv1P710oXWX5NZ0usanKr7sU1+V/Mk8qZ5vlMQ==",
-                            PhoneNumberConfirmed = false,
-                            Postcode = 0,
-                            SecurityStamp = "8cbd64b8-c408-465f-a90a-0bff2c9ee798",
-                            TwoFactorEnabled = false,
-                            UserName = "superadmin@email.com"
-                        },
-                        new
-                        {
-                            Id = "95d95d35-ae78-4aac-8fb7-a62ee9a068c7",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "1975f345-256a-44ca-9b67-ac52345ab61f",
-                            Email = "admin@email.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@EMAIL.COM",
-                            NormalizedUserName = "ADMIN@EMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKs3jZzomz4+YsLVY0HSb5zirvrEaZ8mfLT5b3oMN6u3/8a53iGyNRPVczjYd0e03Q==",
-                            PhoneNumberConfirmed = false,
-                            Postcode = 0,
-                            SecurityStamp = "2a0644e8-c0e7-442b-9a42-406b8bb7132d",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@email.com"
-                        },
-                        new
-                        {
-                            Id = "4c31146d-59fa-4e29-a013-0096afc6d903",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "6345ec60-070f-467e-b198-12fd14f99ec8",
-                            Email = "customer1@email.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "CUSTOMER1@EMAIL.COM",
-                            NormalizedUserName = "CUSTOMER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGBCa1rWOmIIpKcDNyX5NH9wZri38TnuV+awmZsvkvMhZk3lPIMzLAVv7bx0E9xDNA==",
-                            PhoneNumberConfirmed = false,
-                            Postcode = 0,
-                            SecurityStamp = "01d44e16-2bd3-407b-820d-64a656ea75c6",
-                            TwoFactorEnabled = false,
-                            UserName = "customer1@email.com"
-                        });
                 });
 
-            modelBuilder.Entity("ER_Smms.Models.Language", b =>
+            modelBuilder.Entity("ER_Smms.Models.MooringType", b =>
                 {
-                    b.Property<int>("LanguageId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("LanguageName")
+                    b.Property<string>("Info")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PersonId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LanguageId");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("Languages");
-                });
-
-            modelBuilder.Entity("ER_Smms.Models.Person", b =>
-                {
-                    b.Property<int>("PersonId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PersonName")
+                    b.Property<string>("Label")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PersonPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id");
 
-                    b.HasKey("PersonId");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("People");
-                });
-
-            modelBuilder.Entity("ER_Smms.Models.PersonLanguage", b =>
-                {
-                    b.Property<int>("PersonId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PersonId", "LanguageId");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("PersonLanguage");
+                    b.ToTable("MooringTypes");
                 });
 
             modelBuilder.Entity("ER_Smms.Models.Pier", b =>
@@ -309,6 +309,9 @@ namespace ER_Smms.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("HarbourId")
                         .HasColumnType("int");
@@ -319,11 +322,175 @@ namespace ER_Smms.Migrations
                     b.Property<string>("Label")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HarbourId");
 
                     b.ToTable("Piers");
+                });
+
+            modelBuilder.Entity("ER_Smms.Models.ServiceApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ApplicantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BoatDataId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("InQueue")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ServiceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicantId");
+
+                    b.HasIndex("BoatDataId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ServiceTypeId");
+
+                    b.ToTable("ServiceApplications");
+                });
+
+            modelBuilder.Entity("ER_Smms.Models.ServiceHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BoatDataId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BoatslipId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ServiceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("WinterstoreSpotId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BoatDataId");
+
+                    b.HasIndex("BoatslipId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ServiceTypeId");
+
+                    b.HasIndex("WinterstoreSpotId");
+
+                    b.ToTable("ServiceHistories");
+                });
+
+            modelBuilder.Entity("ER_Smms.Models.ServiceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ArtNr")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Depth")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("Label")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Length")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Width")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServiceTypes");
+                });
+
+            modelBuilder.Entity("ER_Smms.Models.WinterstoreSpot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BoatDataIdRef")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Height")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("Label")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Length")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int?>("ServiceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SpotM2")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Width")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceTypeId");
+
+                    b.ToTable("WinterstoreSpots");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -351,29 +518,6 @@ namespace ER_Smms.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "4a4490c0-ca96-4ace-8e9f-4fc1e91f0022",
-                            ConcurrencyStamp = "033f0d7d-93c1-474e-9334-4be93d4dfb86",
-                            Name = "SuperAdmin",
-                            NormalizedName = "SUPERADMIN"
-                        },
-                        new
-                        {
-                            Id = "438db5c8-0513-43a0-a84c-cd416c4e3a54",
-                            ConcurrencyStamp = "73560a86-d1af-4672-9b91-596c78249885",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "0948bea6-fb82-49c9-8cd8-fec213fe8e8a",
-                            ConcurrencyStamp = "c5814d4d-30d3-454f-88f0-02e4ddaeb831",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -461,23 +605,6 @@ namespace ER_Smms.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "0fc7006f-1864-4244-958d-a4cf378298a5",
-                            RoleId = "4a4490c0-ca96-4ace-8e9f-4fc1e91f0022"
-                        },
-                        new
-                        {
-                            UserId = "95d95d35-ae78-4aac-8fb7-a62ee9a068c7",
-                            RoleId = "438db5c8-0513-43a0-a84c-cd416c4e3a54"
-                        },
-                        new
-                        {
-                            UserId = "4c31146d-59fa-4e29-a013-0096afc6d903",
-                            RoleId = "0948bea6-fb82-49c9-8cd8-fec213fe8e8a"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -501,55 +628,40 @@ namespace ER_Smms.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ER_Smms.Models.BoatData", b =>
+                {
+                    b.HasOne("ER_Smms.Models.Boatslip", "Boatslip")
+                        .WithMany("BoatDatas")
+                        .HasForeignKey("BoatslipId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ER_Smms.Models.IdentityAppUser", "Customer")
+                        .WithMany("BoatDatas")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ER_Smms.Models.WinterstoreSpot", "WinterstoreSpot")
+                        .WithMany("BoatDatas")
+                        .HasForeignKey("WinterstoreSpotId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
             modelBuilder.Entity("ER_Smms.Models.Boatslip", b =>
                 {
+                    b.HasOne("ER_Smms.Models.MooringType", "MooringType")
+                        .WithMany("Boatslips")
+                        .HasForeignKey("MooringTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("ER_Smms.Models.Pier", "Pier")
-                        .WithMany()
-                        .HasForeignKey("PierId");
-                });
+                        .WithMany("Boatslips")
+                        .HasForeignKey("PierId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity("ER_Smms.Models.City", b =>
-                {
-                    b.HasOne("ER_Smms.Models.Country", "Country")
-                        .WithMany("Cities")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ER_Smms.Models.Language", b =>
-                {
-                    b.HasOne("ER_Smms.Models.Person", null)
-                        .WithMany("Languages")
-                        .HasForeignKey("PersonId");
-                });
-
-            modelBuilder.Entity("ER_Smms.Models.Person", b =>
-                {
-                    b.HasOne("ER_Smms.Models.City", "City")
-                        .WithMany("People")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ER_Smms.Models.Language", null)
-                        .WithMany("People")
-                        .HasForeignKey("LanguageId");
-                });
-
-            modelBuilder.Entity("ER_Smms.Models.PersonLanguage", b =>
-                {
-                    b.HasOne("ER_Smms.Models.Language", "Language")
-                        .WithMany("PersonLanguages")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ER_Smms.Models.Person", "Person")
-                        .WithMany("PersonLanguages")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ER_Smms.Models.ServiceType", "ServiceType")
+                        .WithMany("Boatslips")
+                        .HasForeignKey("ServiceTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ER_Smms.Models.Pier", b =>
@@ -557,6 +669,65 @@ namespace ER_Smms.Migrations
                     b.HasOne("ER_Smms.Models.Harbour", "Harbour")
                         .WithMany("Piers")
                         .HasForeignKey("HarbourId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("ER_Smms.Models.ServiceApplication", b =>
+                {
+                    b.HasOne("ER_Smms.Models.Applicant", "Applicant")
+                        .WithMany("ServiceApplications")
+                        .HasForeignKey("ApplicantId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ER_Smms.Models.BoatData", "BoatData")
+                        .WithMany("ServiceApplications")
+                        .HasForeignKey("BoatDataId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ER_Smms.Models.IdentityAppUser", "Customer")
+                        .WithMany("ServiceApplications")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ER_Smms.Models.ServiceType", "ServiceType")
+                        .WithMany("ServiceApplications")
+                        .HasForeignKey("ServiceTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("ER_Smms.Models.ServiceHistory", b =>
+                {
+                    b.HasOne("ER_Smms.Models.BoatData", "BoatData")
+                        .WithMany("ServiceHistories")
+                        .HasForeignKey("BoatDataId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ER_Smms.Models.Boatslip", "Boatslip")
+                        .WithMany("ServiceHistories")
+                        .HasForeignKey("BoatslipId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ER_Smms.Models.IdentityAppUser", "Customer")
+                        .WithMany("ServiceHistories")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ER_Smms.Models.ServiceType", "ServiceType")
+                        .WithMany("ServiceHistories")
+                        .HasForeignKey("ServiceTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ER_Smms.Models.WinterstoreSpot", "WinterstoreSpot")
+                        .WithMany("ServiceHistories")
+                        .HasForeignKey("WinterstoreSpotId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("ER_Smms.Models.WinterstoreSpot", b =>
+                {
+                    b.HasOne("ER_Smms.Models.ServiceType", "ServiceType")
+                        .WithMany("WinterstoreSpots")
+                        .HasForeignKey("ServiceTypeId")
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 

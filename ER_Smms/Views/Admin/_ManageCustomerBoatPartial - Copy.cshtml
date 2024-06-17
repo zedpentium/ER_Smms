@@ -1,0 +1,87 @@
+﻿@model BoatData
+
+
+             <p>Info för vald Båt: <br /></p>
+
+            <div class="row">
+                <div class="fixedcolboatinfolabels">
+                    Namn:  <br />
+                    Längd(m): <br />
+                    Bredd(m): <br />
+                    Djup(m): <br />
+                    Vikt(kg): <br />
+                </div>
+
+                <div class="col">
+                    <b id="selectedboatlabel">@Model.Label</b> <br />
+                    <b id="selectedboatlength">@Model.Length</b> <br />
+                    <b id="selectedboatwidth">@Model.Width</b> <br />
+                    <b id="selectedboatdepth">@Model.Depth</b> <br />
+                    <b id="selectedboatweight">@Model.Weight</b> <br />
+                </div>
+            </div>
+        <br />
+
+        @*<div>Nuvarande Båtplats(er):
+            <br />
+            <b id="selectedboatboatslip">_</b>
+            <br />
+
+            <form asp-controller="Admin" asp-action="ManageCustomerSaveAssignedBoatslip" method="post" role="form">
+
+            <label asp-for="SelectedBoatslipId"></label>
+            <select asp-for="SelectedBoatslipId" onchange="showApplySaveBoatslipButton()">
+            <option value="0" disabled selected>Välj Ledig BåtPlats</option>
+
+            @foreach (Boatslip freeboatslip in @Model.FreeBoatslips)
+            {
+                <option value="NR: @freeboatslip.Id">@freeboatslip.Label - Brygga: @freeboatslip.Pier.Label</option>
+            }
+            </select>
+            <br />
+            <input asp-for="SelectedBoatFormId" hidden />
+            <div>
+            <input hidden type="submit" class="optionBtnGreen" id="saveselectedboatsliptoboat" value="Spara Vald Båtplats">
+            </div>
+
+            </form>
+            </div>
+
+        <p>Nuvarande Vinterförvaring: <br />
+            <b id="selectedboatwinterstorespot">_</b></p>
+
+
+    }
+    else
+    { <p>Kund har ingen båtinfo lagrad...</p>}*@
+
+
+    <div class="col-1"></div>
+
+        <div class="col-6">
+        <div class="row"><h6>Platser</h6><br /><br /></div>
+        <div class="row">
+@*            @if(Model.CustomerAllInfo.)
+            {
+                <form asp-controller="Identity" asp-action="EditCustomer" asp-route-id="@Model.CustomerAllInfo.UserName"
+                method="post" role="form">
+
+                @Html.AntiForgeryToken()
+                <input type="submit" id="optionBtnGreen" value="Editera Kunduppgifter">
+                </form>
+                }*@
+
+            <br />
+            <br />
+
+
+
+
+            @Html.AntiForgeryToken()
+@*            <input asp-for="Customer" hidden />
+            <input asp-for="Id" hidden />*@
+
+
+        </div>
+    </div>
+    

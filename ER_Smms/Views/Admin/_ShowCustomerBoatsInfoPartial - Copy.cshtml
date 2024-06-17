@@ -1,0 +1,163 @@
+﻿@using ER_Smms.Models
+@using ER_Smms.Models.ViewModels
+@using ER_Smms.Models.ViewModels.Admin
+@model ManageCustomerViewModel
+
+<div class="col-12">
+
+    <div class="row">
+
+    <div class="col-5">
+        <div class="row"><h6>Båt(ar)</h6><br /><br /></div>
+
+        <div class="row">
+
+    
+
+    @if (Model.CustomerAllInfo.BoatDatas != null)
+    {
+        <label asp-for="SelectedBoatDataId"></label>
+        <select asp-for="SelectedBoatDataId" onchange="showSelectedBoat(this)">
+            <option value="0" disabled selected>Välj Båt</option>
+
+            foreach (BoatData boat in Model.CustomerAllInfo.BoatDatas)
+            {
+                <option value="boat.Id">boat.Label</option>
+            }
+
+        </select>
+
+        <br />
+        <br />
+        @*<div class="col-11">*@
+            <partial name="_ManageCustomerBoatPartial" />
+            }
+
+@*
+    } else
+    { <p>Kund har ingen båtinfo lagrad...</p>}
+
+    }*@
+
+    </div>
+
+    </div>
+
+    <div class="col-1"></div>
+
+@*          <div class="col-6">
+        <div class="row"><h6>Platser</h6><br /><br /></div>
+        <div class="row">
+          @if(Model.CustomerAllInfo.)
+            {
+                <form asp-controller="Identity" asp-action="EditCustomer" asp-route-id="@Model.CustomerAllInfo.UserName"
+                method="post" role="form">
+
+                @Html.AntiForgeryToken()
+                <input type="submit" id="optionBtnGreen" value="Editera Kunduppgifter">
+                </form>
+                }*@
+
+            <br />
+            <br />
+
+
+
+
+            @*Html.AntiForgeryToken()*@
+@*            <input asp-for="Customer" hidden />
+            <input asp-for="Id" hidden />*@
+
+
+        </div>
+    </div>
+    
+
+
+
+@*</div>*@
+
+
+<script>
+    function showSelectedBoat(elem) {
+        @{
+            int cboatId = 0; }
+        @cboatId = elem.value
+@*        var arrayBoatData = JSON.parse('@Html.Raw(Json.Serialize(Model.CustomerAllInfo.BoatDatas))');
+        var foundObj = arrayBoatData.find(s => s.id == elem.value);
+
+        setElementInnerHtml("selectedboatlabel", isObjNull(foundObj.label));
+        setElementInnerHtml("selectedboatlength", isObjNull(foundObj.length));
+        setElementInnerHtml("selectedboatwidth", isObjNull(foundObj.width));
+        setElementInnerHtml("selectedboatdepth", isObjNull(foundObj.depth));
+        setElementInnerHtml("selectedboatweight", isObjNull(foundObj.weight));
+
+        setElementInnerHtml("selectedboatboatslip", hasBoatASpot(foundObj.boatslip));
+        
+        setElementInnerHtml("selectedboatwinterstorespot", hasBoatASpot(foundObj.winterstoreSpot));*@
+
+        location.href='@Url.Action("CustomerBoatInfo", "Admin",
+                new { boatDataId = cboatId })';
+
+    }
+
+    function isObjNull(objValue) {
+        if(objValue != null)
+        { 
+            var showText = objValue.toString();
+
+            return showText.replace(".", ",");
+        }
+        else { return "info saknas"; }
+    }
+
+ @*    function hasBoatASpot(obj) {
+        let showInfo
+        if(obj != null)
+        { 
+            //console.log(obj)
+            if(obj.pier != null ){
+
+
+               var removeBoatslipButtonFromSelectedBoat = "
+                <input type="button" class="btn btn-secondary btnWidthSeparate"
+                name="btnBack" value="Tillbaka"
+                onClick="location.href='@Url.Action("RemoveBoatslipFromSelectedBoat", "Admin",
+                new { boatDataId = obj.id, boatslipId = item.paramValue2 })'" />"
+
+                showInfo = obj.label + " - " + obj.pier.label
+            }
+            else if(obj.serviceType != null) { showInfo = obj.label + " - " + obj.serviceType.label }
+            else { showInfo = obj.label }
+
+
+
+            return showInfo
+        }
+        else
+        { 
+            showInfo = "Ingen"
+            return showInfo
+        }
+    }*@
+
+@*    function showApplySaveBoatslipButton() {
+        document.getElementById("saveselectedboatsliptoboat").hidden=false;
+
+        //var selectedBoatForForm = document.getElementById("SelectedBoatslipId");
+        document.getElementById("SelectedBoatFormId").value = document.getElementById("SelectedBoatslipId");
+
+        //var buttonElement = document.getElementById("saveselectedboatsliptoboat");
+
+        //buttonElement.style.display = "";
+    }
+
+    function getSelectedBoatId() {
+
+    }
+
+    function getSelected() {
+
+    }*@
+
+</script>

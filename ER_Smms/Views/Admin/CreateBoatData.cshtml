@@ -1,0 +1,73 @@
+﻿@model CreateBoatDataViewModel
+
+<div id="adminboatslip">
+    @*    <h4>Skapa ny Hamn</h4>*@
+
+
+
+    <div>
+        <form class="createeditforms" asp-action="CreateBoatData" method="post" role="form">
+            <fieldset class="form-group" id="fieldsetcreateharbour">
+                <legend id="legendcreateharbour">Skapa ny BåtInfo:</legend>
+                @Html.AntiForgeryToken()
+
+                <br />
+
+                <label asp-for="Label"></label>
+                <input asp-for="Label" />
+                <br />
+                <span id="redtext" asp-validation-for="Label"></span>
+                <br />
+                <label asp-for="BrandModel"></label>
+                <input asp-for="BrandModel" />
+                <br />
+                <span id="redtext" asp-validation-for="BrandModel"></span>
+                <br />
+                <label asp-for="Length"></label>
+                <input asp-for="Length" />
+                <br />
+                <span id="redtext" asp-validation-for="Length"></span>
+                <br />
+                <label asp-for="Width"></label>
+                <input asp-for="Width" />
+                <br />
+                <span id="redtext" asp-validation-for="Width"></span>
+                <br />
+                <label asp-for="Depth"></label>
+                <input asp-for="Depth" />
+                <br />
+                <span id="redtext" asp-validation-for="Depth"></span>
+                <br />
+                <label asp-for="Weight"></label>
+                <input asp-for="Weight" />
+                <br />
+                <span id="redtext" asp-validation-for="Weight"></span>
+                <br />
+                <br />
+                <label asp-for="Height"></label>
+                <input asp-for="Height" />
+                <br />
+                <span id="redtext" asp-validation-for="Height"></span>
+                <br />
+                <div>
+                    <label asp-for="HaveInsurance"></label>
+                    <br />
+                    <input class="form-check-input" asp-for="HaveInsurance" type="radio" value="yes" /> <b> Ja</b>
+                    <br />
+                    <input class="form-check-input" asp-for="HaveInsurance" type="radio" value="no" /> <b> Nej</b>
+                </div>
+                <br />
+                <br />
+                <input type="submit" class="btn btn-primary" name="btnFilter" value="Skapa" />
+            </fieldset>
+        </form>
+
+    </div>
+
+
+
+
+
+
+</div>
+

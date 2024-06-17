@@ -1,0 +1,55 @@
+﻿@model EditMooringTypeViewModel
+
+<div>
+    <h4>Editera FörtöjningsTyp</h4>
+
+@{ 
+    if (ViewBag.Mess != null)
+    {
+        <script type="text/javascript">
+        cuteToast({
+                type: "@TempData["ToastType"]",
+                title: "Info",
+                message: "@ViewBag.Mess",
+                timer: 5000,
+            });
+        </Script>
+    }
+}
+
+ <div>
+
+                <form class="createeditforms" asp-action="EditMooringTypeSave" method="post" role="form">
+                    <fieldset id="fieldsetbox">
+                    <legend id="legbox">Editera FörtöjningsTyp (ID: @Model.Id)</legend>
+                    @Html.AntiForgeryToken()
+
+                    <input asp-for="Id" hidden />
+                    <label asp-for="Label"></label>
+                    <br />
+                    <input asp-for="Label" required />
+                    <br />
+                    <span id="redtext" asp-validation-for="Label"></span>
+                    <br />
+                    <br />
+                    <label asp-for="Info"></label>
+                    <br />
+                    <textarea asp-for="Info" required></textarea>
+                    <br />
+                    <span id="redtext" asp-validation-for="Info"></span>
+
+                    <br />
+                    <br />
+                    <input type="submit" class="btn btn-primary btnWidthSeparate"
+                    name="btnFilter" value="Spara" />
+                    <input type="button" class="btn btn-secondary btnWidthSeparate"
+                    name="btnBack" value="Tillbaka"
+                    onClick="location.href='@Url.Action("MooringType", "Admin")'" />
+                    
+                    </fieldset>
+                </form>
+                @*<p>@Model.SearchResultEmpty</p>*@
+
+        </div>
+
+</div>

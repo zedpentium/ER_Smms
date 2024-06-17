@@ -1,0 +1,130 @@
+﻿@model ManageCustomerViewModel
+
+<div class="col-12">
+
+    <div class="row">
+        <div class="row">
+            <h6>Valda båtens VinterFörvaring</h6>
+            <br />
+            <br />
+        </div>
+
+            <div class="row">
+                <div class="border border-6 bg-secondary border-primary rounded-3 p-1">
+
+                    @if(Model.SelectedBoatDataId != 0)
+                    {
+                        <b>Vald båt är: </b> @Model.BoatData.Label 
+                        <br/>
+                        <br/>
+                    }
+
+                    @if (Model.BoatData.WinterstoreSpot != null)
+                    {
+                        decimal spotPrice =
+                            Model.BoatData.WinterstoreSpot.SpotM2 * Model.BoatData.WinterstoreSpot.ServiceType.Price;
+
+                        <div class="border border-6 bg-secondary border-primary rounded-3 p-1">
+                        <p><b> PlatsNamn: </b>@Model.BoatData.WinterstoreSpot.Label <br />
+                            <b> Storlek: </b>L: @Model.BoatData.WinterstoreSpot.Length B: @Model.BoatData.WinterstoreSpot.Width
+                            H: @Model.BoatData.WinterstoreSpot.Height
+                            </p>
+                        <p>
+                            <b>Typ: </b>
+                            @*@if (@Model.BoatData.WinterstoreSpot.ServiceType.Type == "winterstorein")
+                                { Inomhus}*@
+                            @Model.BoatData.WinterstoreSpot.ServiceType.Label
+                        </p>
+
+                        
+                        <p><b>PlatsPris: </b> @spotPrice.ToString("F") kr</p>
+
+                        <form asp-action="RemoveWinterstoreForSelectedBoat" asp-route-id="@Model.BoatData.Id"
+                      method="post" role="form"
+                      onclick="return confirm('Är du säker på att du vill ta bort VinterförvaringsPlats för denna båt?')">
+
+                            @Html.AntiForgeryToken()
+                            <input type="submit" id="optionBtnRed" value="Ta Bort">
+                        </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="border border-6 bg-secondary border-primary rounded-3 p-1">
+                        <p>Ingen Vinterförvaringsplats</p>
+                        </div>
+                    }
+
+                    <br />
+
+                    <div class="border border-6 bg-secondary border-primary rounded-3 p-1">
+
+                        <div class="row">
+
+                            <div>  @* Contain box *@
+
+                                @*Debug.WriteLine(JsonConvert.SerializeObject(@Model.FreeBoatslips));*@
+
+                                <div>
+                                    @if (@Model.SelectedBoatDataId > 0 && @Model.FreeWinterstoreSpots != null)
+                                    {
+                                        <div class="bg-dark text-light"> <b>&nbsp;Tilldela/Byta VinterFörvaring: </b> </div>
+
+                                        @*Model.SelectedBoatFormId = Model.SelectedBoatDataId;*@
+                                        <form asp-controller="Admin" asp-action="ManageCustomerSaveAssignedWinterstore" method="post" role="form">
+
+                                            <select asp-for="WinterstoreSpotId">
+                                                <option value="0" disabled selected>Välj en Ledig BåtPlats</option>
+
+                                                @foreach (WinterstoreSpot freeWinterstore in Model.FreeWinterstoreSpots)
+                                                {
+                                                    <option value="@freeWinterstore.Id">
+                                                        NR: @freeWinterstore.Label - Mått:
+                                                        L: @freeWinterstore.Length B: @freeWinterstore.Width
+                                                        H: @freeWinterstore.Height - @freeWinterstore.ServiceType.Label
+                                                    </option>
+                                                }
+                                            </select>
+                                            <input asp-for="SelectedBoatDataId" hidden />
+
+                                            <br />
+
+                                            <br />
+                                            <div>
+                                                <input type="submit" id="optionBtnGreen" value="Tilldela Vald VinterFörvaring">
+                                            </div>
+
+                                        </form>
+                                    }
+                                </div>
+
+                            </div> @* End Contain box*@
+                            <br />
+
+                        </div> @* End Row*@
+
+                    </div> @* End BorderDiv *@
+
+
+                    <br />
+                <div class="border border-6 bg-secondary border-primary rounded-3 p-1">
+
+                @if (Model.SelectedBoatDataId != 0)
+                {
+
+                    <input type="button" class="btn btn-secondary"
+                       name="btnBack" value="Skapa Ny Vinterförvaringsplats"
+                       onclick="createWinterstoreSpot_PartialView('@Model.BoatData.Customer.UserName');" />
+                }
+                </div> @* End -BorderStyle *@
+
+            </div> @* End -BorderStyle *@
+
+
+            </div> @* end row *@
+
+    </div> @* end top row *@
+
+
+</div> @* end col-12 *@
+

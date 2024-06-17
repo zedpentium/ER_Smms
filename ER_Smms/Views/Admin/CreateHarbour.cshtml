@@ -7,17 +7,22 @@
 
  <div>
                 <form class="createeditforms" asp-action="CreateHarbour" method="post" role="form">
-                    <fieldset id="fieldsetcreateharbour">
+                    <fieldset class="form-group" id="fieldsetcreateharbour">
                     <legend id="legendcreateharbour">Skapa ny Hamn:</legend>
                         @Html.AntiForgeryToken()
+
                         <label asp-for="Label"></label>
                         <br />
                         <input asp-for="Label" required />
+                        <br />
+                        <span id="redtext" asp-validation-for="Label"></span>
                         <br />
                         <br />
                         <label asp-for="Info"></label>
                         <br />
                         <textarea asp-for="Info"  rows="5" cols="40" required></textarea>
+                        <br />
+                        <span id="redtext" asp-validation-for="Info"></span>
                         <br />
                         <br />
                         <input type="submit" class="btn btn-primary" name="btnFilter" value="Skapa" />

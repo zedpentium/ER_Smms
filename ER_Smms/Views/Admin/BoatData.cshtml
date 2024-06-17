@@ -1,0 +1,125 @@
+﻿@using ER_Smms.Models.ViewModels
+@using ER_Smms.Models
+@model BoatDataViewModel
+@*@model DataResultViewModel<BoatDataViewModel>*@
+
+<partial name="_CustomerTopMenu" />
+
+<div id="adminpierss">
+    <h4>Kunders Båtar</h4>
+
+@*    <div>
+    <a asp-action="UserCreateBoatData" class="btn btn-secondary">Skapa ny Båt</a>
+    </div>*@
+    <br />
+
+    <partial name="_ToastHandlerPartial" />
+    
+<div class="table-container">
+    <div class="row bg-dark text-light">
+@*        <div class="col-1">Id</div>*@
+        <div class="col-1">Namn</div>
+        <div class="col-1">Märke & Modell</div>
+        <div class="col-1">Längd(m)</div>
+        <div class="col-1">Bredd(m)</div>
+        <div class="col-1">Djup(m)</div>
+        <div class="col-1">Vikt(kg)</div>
+        <div class="col-1">Höjd(m)</div>
+        <div class="col-1">Försäkring</div>
+        <div class="col-2">Kund</div>
+        <div class="col-2">Alternativ</div>
+    </div>
+        
+@*    @{
+        @Html.Partial("Pagination", Model.Pagination)
+    }*@
+
+        @if (Model.BoatDataListView.Count != 0)
+        {
+            @foreach (BoatData boatData in Model.BoatDataListView)
+            {
+                <div class="row" id="viewlisttable">
+@*                    <div class="col-1">@boatData.Id</div>*@
+                    <div class="col-1 text-wrap text-break">@boatData.Label</div>
+                    <div class="col-1 text-wrap text-break">@boatData.BrandModel</div>
+                    <div class="col-1">@boatData.Length</div>
+                    <div class="col-1">@boatData.Width</div>
+                    <div class="col-1">@boatData.Depth</div>
+                    <div class="col-1">@boatData.Weight</div>
+                    <div class="col-1">@boatData.Height</div>
+                    <div class="col-1">
+                        @if (boatData.HaveInsurance == "yes")
+                        { <p>JA</p> }
+                        else if (boatData.HaveInsurance == null)
+                        { <p>EJ Valt</p> }
+                        else
+                        { <p> NEJ</p> }
+                    </div>
+                    <div class="col-2 text-wrap text-break">
+                        @if (boatData.Customer != null)
+                        {
+                            @boatData.Customer.Email
+                        }
+                    </div>
+
+                    <div class="col-2" id="btnBorderBox">
+
+                        <div class="form-sidebyside">
+                            @* Container for buttons *@
+
+                            <div class="row">
+
+                                <div class="col">
+                                    <form asp-action="EditBoatData" asp-route-id="@boatData.Id"
+                                  method="post" role="form">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="submit" id="optionBtnGreen" value="Editera">
+                                    </form>
+                                </div>
+
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
+                                    <div class="col">
+                                        <form asp-action="DeleteBoatData" asp-route-id="@boatData.Id"
+                                  method="post" role="form"
+                                  onclick="return confirm('Är du säker på att du vill radera denna Båt?')">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="submit" id="optionBtnRed" value="Radera">
+                                        </form>
+                                    </div>
+                                }
+
+                                <br />
+                                <p>TEST datumfunktion</p>
+                                <h6 small>Skapad: @boatData.CreatedDate</h6 small>
+                                <br />
+                                @if (@boatData.UpdatedDate.Year.Equals(1))
+                                { <h6 small>Uppdaterad: Aldrig</h6 small> }
+                                else
+                                { <h6 small>Uppdaterad: @boatData.UpdatedDate </h6 small> }
+                                
+
+                            </div> @* ROW *@
+                        </div> @* Container for buttons *@
+
+                        <div class="form-sidebyside-floatclear"></div>
+                    </div> @* BorderButton Box *@
+
+                </div> @* viewTable *@
+            } @* End for each *@
+
+        }
+        else
+        { 
+            <p>Inga båtar i databasen...</p>
+        }
+         
+        
+</div>
+
+</div>
+                

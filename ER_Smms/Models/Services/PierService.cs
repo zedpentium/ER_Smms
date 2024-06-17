@@ -1,64 +1,50 @@
-﻿using System;
+﻿using ER_Smms.Models.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using ER_Smms.Models.Interfaces;
-using ER_Smms.Models.ViewModels;
-using ER_Smms.Models;
 
 namespace ER_Smms.Models.Services
 {
     public class PierService : IPierService
     {
-        private readonly IPierRepo _pierRepo;
+        private readonly IPierRepo _repo;
 
-        public PierService(IPierRepo pierRepo)
+        public PierService(IPierRepo repo)
         {
-            _pierRepo = pierRepo;
+            _repo = repo;
         }
 
 
-        public string Create(CreatePierViewModel viewModel, Harbour selectedObj)
+        public async Task Create(Pier obj)
         {
+            await _repo.Create(obj);
 
-            Pier remapViewToObj = new Pier(viewModel.Label, viewModel.Info);
-
-            string createResultMessage = _pierRepo.Create(remapViewToObj, selectedObj);
-
-            return createResultMessage;
-        }
-
-        public PierViewModel ReadAll()
-        {
-            PierViewModel listView = new PierViewModel() { PierListView = _pierRepo.ReadAll() };
-
-            return listView;
-        }
-
-        public string Update(Pier pier)
-        {
-            string updateResultMessage = _pierRepo.Update(pier);
-
-            return updateResultMessage;
         }
 
 
-        public Pier FindBy(int id)
+        public async Task<List<Pier>> ReadAll()
         {
-            Pier foundObj = _pierRepo.Read(id);
-
-            return foundObj;
+            return await _repo.ReadAll();
         }
 
-        public bool Remove(int id)
-        {
-            Pier objToDelete = _pierRepo.Read(id);
-            bool success = _pierRepo.Delete(objToDelete);
 
-            return success;
+        public async Task<Pier> FindBy(int id)
+        {
+            return await _repo.Read(id);
         }
+
+
+        public async Task Update(Pier obj)
+        {
+            await _repo.Update(obj);
+        }
+
+
+        public async Task Remove(int id)
+        {
+            await _repo.Delete(await _repo.Read(id));
+        }
+
 
     }
-
 
 }

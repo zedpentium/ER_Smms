@@ -1,0 +1,75 @@
+﻿@model UserListViewModel
+
+<div>
+    <h4>Alla Användare-Konton</h4>
+    <br />
+
+<partial name="_ToastHandlerPartial" />
+
+
+<div class="table-container">
+    <div class="row bg-dark text-light">
+        <div class="col-2">Id</div>
+        <div class="col-2">Namn</div>
+        <div class="col-3">Inloggning</div>
+        <div class="col-3">Info</div>
+        <div class="col-2">Alternativ</div>
+    </div>
+    @if (Model.UserListView.Count != 0)
+        {
+            @foreach (IdentityAppUser user in Model.UserListView)
+            {
+                <div class="row" id="viewlisttable">
+                    <div class="col-2 text-wrap text-break">@user.Id</div>
+                    <div class="col-2 text-wrap text-break">@user.FirstName @user.LastName</div>
+                    <div class="col-3 text-wrap text-break">@user.UserName</div>
+                    <div class="col-3 text-wrap text-break">
+                        Adress: @user.Address <br />
+                        PostNr: @user.Postcode <br />
+                        Stad: @user.City <br />
+                        Tel: @user.PhoneNumber <br />
+                        Epost: @user.Email <br />
+                        </div>
+                    <div class="col-2" id="btnBorderBox">
+
+                        <div class="form-sidebyside"> @* Container for buttons *@
+                            <div class="row">
+
+                        <div class="col">
+                            <a class="btn btn-sm btn-primary"
+                            asp-action="EditUser" asp-route-id="@user.UserName" >Editera</a>
+                        </div>
+
+@*                        @if (User.IsInRole("SuperAdmin"))
+                         {
+                        <div class="col">
+                            <form asp-action="DeleteHarbour" asp-route-id="@harbour.Id"
+                            method="post" role="form"
+                            onclick="return confirm('Är du säker på att du vill radera denna Hamn?')">
+
+                                @Html.AntiForgeryToken()
+                                <input type="submit" id="optionBtnRed" value="Radera">
+                            </form>
+                        </div>
+                         }*@
+
+                            </div> @* ROW *@
+                        </div> @* Container for buttons *@
+
+                        <div class="form-sidebyside-floatclear"></div>
+                    </div> @* BorderButton Box *@
+
+                </div> @* viewTable *@
+            }
+
+        }
+        else
+        {
+            <p>Inga Användare hittades...</p>
+        }
+
+
+</div>
+   
+</div>
+                

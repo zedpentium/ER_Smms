@@ -1,0 +1,76 @@
+﻿@model ServiceTypeViewModel
+
+
+<partial name="_ServiceTopMenu" />
+
+<div id="adminharbours">
+    <h4>Hantera Tjänster</h4>
+    <br />
+
+    <partial name="_ToastHandlerPartial" />
+
+
+<div class="table-container">
+    <div class="row bg-dark text-light">
+@*        <div class="col-1">Databas_Id</div>*@
+        <div class="col-3">@Html.ActionLink("ArtNr - Typ", "ServiceType", new { sortFilter = ViewBag.ServiceTypeArtNrSortParm })</div>
+        <div class="col-5">Namn</div>
+        <div class="col-2">Pris</div>
+        <div class="col-2">Alternativ</div>
+    </div>
+        @if (Model.ServiceTypeListView.Count != 0)
+            {
+                @foreach (ServiceType serviceType in Model.ServiceTypeListView)
+                {
+                    <div class="row" id="viewlisttable">
+@*                        <div class="col-1">@serviceType.Id</div>*@
+                        <div class="col-3">@serviceType.ArtNr <br /> @serviceType.Type</div>
+                        <div class="col-5 text-wrap text-break">@serviceType.Label <br /> @serviceType.Size</div>
+                        <div class="col-2">@serviceType.Price</div>
+                        <div class="col-2" id="btnBorderBox">
+
+                            <div class="form-sidebyside"> @* Container for buttons *@
+                                <div class="row">
+
+                            <div class="col">
+                                <form asp-action="EditServiceType" asp-route-id="@serviceType.Id"
+                                method="post" role="form" >
+
+                                    @Html.AntiForgeryToken()
+                                    <input type="submit" id="optionBtnGreen" value="Editera">
+                                </form>
+                            </div>
+
+                            @if (User.IsInRole("SuperAdmin"))
+                             {
+                            <div class="col">
+                                <form asp-action="DeleteServiceType" asp-route-id="@serviceType.Id"
+                                method="post" role="form"
+                                onclick="return confirm('Är du säker på att du vill radera denna Tjänst?')">
+
+                                    @Html.AntiForgeryToken()
+                                    <input type="submit" id="optionBtnRed" value="Radera">
+                                </form>
+                            </div>
+                             }
+
+                                </div> @* ROW *@
+                            </div> @* Container for buttons *@
+
+                            <div class="form-sidebyside-floatclear"></div>
+                        </div> @* BorderButton Box *@
+
+                    </div> @* viewTable *@
+                }
+
+        }
+        else
+        { 
+            <p>Inga Tjänster i databasen...</p>
+        }
+
+
+</div>
+   
+</div>
+                

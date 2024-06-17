@@ -1,0 +1,16 @@
+﻿@model FrontendViewModel
+
+
+<div>
+    <h4>Ett fel har uppstått.</h4>
+
+    <br />
+    <br />
+    <div>
+        <b>Felet är: @Model.ErrorMessageInfo</b>
+        <br/><br/>
+        <a class="btn btn-primary" asp-controller="Frontend" asp-action="Index">OK. Återgå.</a>
+    </div>
+
+</div>
+                

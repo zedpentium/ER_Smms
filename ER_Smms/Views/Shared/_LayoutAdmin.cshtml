@@ -3,52 +3,62 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link rel="stylesheet" href="~/bootstrap-5.0.2-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-5.0.2-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/adminstyles.css" />
     <link rel="stylesheet" href="~/lib/cute-alert/style.css" />
-    <script src="https://kit.fontawesome.com/e08732690d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/lib/fontawesome-free-6.0.0-web/css/all.css" />
+@*    <link rel="stylesheet" href="~/lib/fontawesome-free-6.0.0-web/css/brands.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome-free-6.0.0-web/css/solid.css" />*@
+@*    <script src="@Url.Content("~/lib/fontawesome-free-6.0.0-web/js/fontawesome.js")"></script>
+    <script src="@Url.Content("~/lib/fontawesome-free-6.0.0-web/js/solid.js")"></script>*@
     <script src="@Url.Content("~/lib/cute-alert/cute-alert.js")"></script>
+    @*<script src="@Url.Content("~/lib/ckeditor4-basic/ckeditor.js")"></script>*@
+    <script src="@Url.Content("~/js/ckeditor5classic.js")"></script>
+
+    <base href="/"/>
 
 </head>
 <body>
     <div class="divwrapper-admin"> <!-- start divwrapper-->
-
         @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
         {
-
             <header class="item-a-admin">
                 <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-bottom" id="navmenubox">
                     <a class="navbar-brand text-info" id="menulogo" asp-controller="Admin" asp-action="Index">
                         <img alt="logo" src="@Url.Content("~/pictures/jrhlogosquare.jpg")">
                     </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul class="navbar-nav">
-                            @*<li class="nav-item-admin dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                    @if (User.IsInRole("SuperAdmin"))
+                    {
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                            <ul class="navbar-nav">
+                                @*<li class="nav-item-admin dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Add/Delete
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                                     <li><a class="dropdown-item" asp-controller="Country" asp-action="Index">Country</a></li>
                                     <li><a class="dropdown-item" asp-controller="City" asp-action="Index">City</a></li>
                                     <li><a class="dropdown-item" asp-controller="Language" asp-action="Index">Language</a></li>
-                                </ul>
-                            </li>*@
-@*                            <li class="nav-item-admin">
-                                <a class="nav-link" asp-controller="Admin" asp-action="Index">Admin UI</a>
-                            </li>*@
+                                    </ul>
+                                    </li>*@
 
-                            <li class="nav-item-admin">
-                                <a class="nav-link" asp-controller="Identity" asp-action="Index">Edit UserRoles</a>
-                            </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Identity" asp-action="ListAllRoles"><i class="fa-solid fa-pen-to-square"></i> Editera Roller</a>
+                                </li>
 
-                            <li class="nav-item-admin">
-                                <partial name="_LoginPartial" />
-                            </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Identity" asp-action="ListAllUsers"><i class="fa-solid fa-pen-to-square"></i> Editera Användare</a>
+                                </li>
 
-                        </ul>
+                            </ul>
+                        </div>
+                    }
+                    <div>
+                        <partial name="_LoginPartial" />
                     </div>
 
 
@@ -62,59 +72,33 @@
                     <br>
                 </div>
 
-                <nav class="nav-admin animated bounceInDown bg-dark">
-
-                    <ul>
-                        <li><a class="nav-link" >Hantera Hamnen</a>
-                            <ul>
+                <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-bottom">
+                    <ul class="navbar-nav flex-column">
+                        <b style="padding: 4px 4px;" class="text-light bg-dark">Hantera Hamnen</b>
+                        <li>
+                            <ul class="nav flex-column">
                                 <li><a class="nav-link" asp-controller="Admin" asp-action="Harbour">Hamnar</a></li>
                                 <li><a class="nav-link" asp-controller="Admin" asp-action="Pier">Bryggor</a></li>
+                                <hr style="color: white;" class="my-0" />
+                                <li><a class="nav-link" asp-controller="Admin" asp-action="MooringType">FörtöjningsTyper</a></li>
+                                <li><a class="nav-link" asp-controller="Admin" asp-action="ServiceType">Tjänster</a></li>
+                                <hr style="color: white;" class="my-0" />
                                 <li><a class="nav-link" asp-controller="Admin" asp-action="Boatslip">Båtplatser</a></li>
+                                <li><a class="nav-link" asp-controller="Admin" asp-action="WinterstoreSpot">VinterförvaringsPlatser</a></li>
                             </ul>
                         </li>
 
-                        <li><a class="nav-link" >Kunder</a>
-                            <ul>
-                                <li><a class="nav-link" asp-controller="Admin" asp-action="Customers">Kunder</a></li>
+                        <b style="padding: 4px 4px;" class="text-light bg-dark" >Hantera Kunder</b>
+                        <li>
+                            <ul class="nav flex-column">
+                                @*<li><a class="nav-link" asp-controller="Admin" asp-action="Customer">Kunder</a></li>*@
+                                <li><a class="nav-link" asp-controller="Admin" asp-action="Blappserv">Kunder</a></li>
+                                @*<li><a class="nav-link" href="/blappserv/">KundLista</a></li>*@
+                                <li><a class="nav-link" asp-controller="Admin" asp-action="BoatData">Kunders Båtar</a></li>
+                                <li><a class="nav-link" asp-controller="Admin" asp-action="ServiceApplications">Ansökningar</a></li>
+                                <li><a class="nav-link" asp-controller="Admin" asp-action="ServiceApplicationQueue">Kö-listan</a></li>
                             </ul>
                         </li>
-
-@*                        <li class="sub-menu"><a href="#settings">Editera Hamn(ar)<div class="fa fa-caret-down right"></div></a>
-                            <ul>
-                            <li><a class="nav-link" asp-controller="Admin" asp-action="Harbour">Hamnar</a></li>
-                            <li><a class="nav-link" asp-controller="Admin" asp-action="CreateHarbour">Skapa ny Hamn</a></li>
-                            <li><a class="nav-link" asp-controller="Admin" asp-action="Pier">Bryggor</a></li>
-                            <li><a class="nav-link" asp-controller="Admin" asp-action="Boatslip">Båtplatser</a></li>
-                            <li><a href="#settings">SubMenu1</a></li>
-                            <li><a href="#settings">SubMenu2</a></li>
-                            <li><a href="#settings">SubMenu3</a></li>
-                            <li><a href="#settings">SubMenu4</a></li>
-                            <li><a href="#settings">SubMenu5</a></li>
-                            </ul>
-                            </li>
-
-                       <li><a href="#profile">Menu3</a></li>
-
-                        <li><a href="#message">Menu4</a></li>
-                        <li class="sub-menu">
-                            <a href="#settings">Menu5<div class="fa fa-caret-down right"></div></a>
-                            <ul>
-                                <li><a href="#settings">SubMenu1</a></li>
-                                <li><a href="#settings">SubMenu2</a></li>
-                                			<li><a href="#settings">SubMenu3</a></li>
-                                    <li><a href="#settings">SubMenu4</a></li>
-                                    <li><a href="#settings">SubMenu5</a></li>
-                            </ul>
-                        </li>
-                        <li class="sub-menu">
-                            <a href="#message">Menu6<div class="fa fa-caret-down right"></div></a>
-                            <ul>
-                                <li><a href="#settings">SubMenu1</a></li>
-                                <li><a href="#settings">SubMenu2</a></li>
-                                			<li><a href="#settings">SubMenu3</a></li>
-                            </ul>
-                        </li>*@
-
                     </ul>
 
                 </nav>
@@ -134,48 +118,20 @@
     </footer>
 
 
-
     <script src="@Url.Content("~/js/jquery-3.6.0.min.js")"></script>
-    <script src="@Url.Content("~/bootstrap-5.0.2-dist/js/bootstrap.bundle.js")"></script>
-    @*<script src="@Url.Content("~/lib/cute-alert/cute-alert.js")"></script>*@
+    <script src="@Url.Content("~/lib/bootstrap-5.0.2-dist/js/bootstrap.bundle.js")"></script>
 
-    <script>
-        $('.sub-menu ul').show();
-        $(".sub-menu a").click(function () {
-        $(this).parent(".sub-menu").children("ul").toggle();
-        $(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
-        });
-    </script>
+    @*My own custom javascripts*@
+    <script src="@Url.Content("~/js/er-ajax-actions.js")"></script>
+    <script src="@Url.Content("~/js/er-js-methods.js")"></script>
 
-    @*    <script>
-        function jsToastMessBox(theMess) {
-        cuteToast({
-        type: "success",
-        message: theMess,
-        timer: 5000,
-        });
-        };
-        </script>*@
-
-    @*    <script>
-        cuteToast({
-        type: "success",
-        message: "theMessertertertert",
-        timer: 5000,
-        });
-        </script>*@
-
-    @*    <script type="text/javascript">
-        function jsToastMessBox() {
-        document.getElementById('testajsid').innerHTML = 'En text som test för js function call';
-        };
-        </script>*@
+@*    <script src="~/_framework/blazor.server.js"></script>*@
 
 
-
-    @*    @if (IsSectionDefined("scripts"))
-        {
+    @if (IsSectionDefined("scripts"))
+    {
         RenderSection("scripts");
-        }*@
+    }
+
 </body>
 </html>

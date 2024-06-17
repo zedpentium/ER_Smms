@@ -1,7 +1,7 @@
 body {
     position: relative;
     width: 1440px;
-    height: 1400px;
+    min-height: 1400px;
     margin: 0 auto;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -133,7 +133,8 @@ body {
 .adminpaneltext {
     background-color: #1c1e1f;
     color: white;
-    text-align:center;
+    text-align: center;
+    padding: 15px 1px 8px;
 }
 
 .item-e_content-admin {
@@ -169,17 +170,13 @@ body {
     border: 1px solid black;
 }
 
-.nav-item-admin {
-    color: white;
-}
-
 .divwrapper-admin {
-    height: 1403px;
+    min-height: 1403px;
     color: black;
     background-color: #87898A;
     display: grid;
-    grid-template-columns: 241px 800px auto;
-    grid-template-rows: 56px 1250px 10px 50px;
+    grid-template-columns: 180px 800px auto;
+    grid-template-rows: 56px auto 10px 50px;
     grid-template-areas:
         'navbararea-admin navbararea-admin navbararea-admin'
         'sidebararea-admin contentarea-admin contentarea-admin'
@@ -187,14 +184,83 @@ body {
         'footerarea-admin footerarea-admin footerarea-admin';
 }
 
+
+.loadspinner {
+    border: 16px solid silver;
+    border-top: 16px solid #337AB7;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 700ms linear infinite;
+    top: 40%;
+    left: 55%;
+    position: absolute;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
+}
     /* Admin UI Layout - End */
+
 
 
 /* --- Admin Form UI - Start --- */
 
+.adminforms {
+    background-color: #bdbdbd;
+    border-radius: 1.2rem;
+    border: 3px;
+    padding: 15px;
+}
+
+    .adminforms input {
+
+    }
+
+
+    .adminforms label {
+
+    }
+
+    atag {
+        background-color: black;
+        color: #fff;
+    }
+
 .createeditforms {
-/*    height: 200px;
-    width: 300px;*/
+    /*    height: 200px;*/
+    width: 500px;
+}
+
+.form-group {
+    background-color: #bdbdbd;
+    border-radius: 1.2rem;
+    border: 3px;
+    padding: 15px;
+    /*background-image: url( "/pictures/formbg1.png");*/
+}
+
+    .form-group label {
+        background-color: #3a3f44;
+        color: #fff;
+        padding: 5px;
+    }
+
+    .form-group input {
+        margin: 5px;
+    }
+
+.form-group legend {
+/*    background-color: #303e74;*/
+    background-color: gray;
+    color: white;
+    padding: 5px 10px;
 }
 
 textarea {
@@ -203,19 +269,30 @@ textarea {
 }
 
 .createeditforms fieldset input {
+    /*width: 300px;*/
+}
+
+.createeditforms fieldset select {
     width: 300px;
 }
 
+.createeditforms fieldset input[type=radio] { /* Make radiobuttons bigger */
+/*    border: 0px;
+    width: 100%;*/
+    height: 1.5em;
+    width: 1.5em;
+}
+
 #fieldsetcreateharbour {
-    background-color: #eeeeee;
-    display: block;
+/*    background-color: #eeeeee;*/
+    /*    display: block;
     margin-left: 2px;
     margin-right: 2px;
     padding-top: 0.35em;
     padding-bottom: 0.625em;
     padding-left: 0.75em;
-    padding-right: 0.75em;
-    border: 2px groove;
+    padding-right: 0.75em;*/
+/*    border: 2px groove;*/
 }
 
 #legendcreateharbour {
@@ -233,9 +310,29 @@ textarea {
     padding: 3px 6px;
 }
 
+#redtext {
+    background-color: #000000;
+    color: #EA4747;
+}
 
 
-/* --- Admin Form UI - Start --- */
+
+/* --- Admin Form UI - End --- */
+
+
+
+/* --- Start - Admin bootstrap rows and columns */
+
+.fixedcolboatinfolabels {
+    width: 80px;
+}
+
+.fixedcolcustomerinfolabels {
+    width: 110px;
+}
+
+/* --- End - Admin bootstrap rows and columns */
+
 
 
 
@@ -311,7 +408,7 @@ div#navmenuright {
 /* -------- form looks ---------- */
 
 .table-container {
-    max-height: 398px;
+    /*max-height: 398px;*/
     max-width: 1024px;
 }
 
@@ -330,14 +427,19 @@ div#navmenuright {
 }
 
 /* Form-button force side by side */
-.form-sidebyside {
+.buttons-sidebyside {
     padding-right: 0px;
-    padding-left: 0px
-
+    padding-left: 0px;
+    padding-bottom: 0px;
     /*display: inline-block;*/
     /*    float: left;
     width: 60px;*/
 }
+
+    .buttons-sidebyside .formbutton {
+        padding-bottom: 10px;
+    }
+
 
 
 
@@ -366,22 +468,25 @@ div#navmenuright {
 /* -------- button looks ---------- */
 #optionBtnGreen {
     background-color: #2CD32C;
-    border: 3px solid #000
+    border: 3px solid #000;
+    font-weight: bold;
+    
 }
 
 #optionBtnBlue {
     background-color: blue;
-    border: 3px solid #000
+    border: 3px solid #000;
 }
 
 #optionBtnRed {
     background-color: red;
-    border: 3px solid #000
+    border: 3px solid #000;
+    font-weight: bold;
 }
 
 #optionBtnGray {
     background-color: dimgray;
-    border: 3px solid #000
+    border: 3px solid #000;
 }
 
 #btnBorderBox {
@@ -407,6 +512,11 @@ div#navmenuright {
 
 
 /* Admin SideMenu styling - Start */
+
+.nav-item-admin {
+    color: white;
+}
+
 .nav-admin {
     /*    position: relative;
     margin: 50px;
@@ -457,6 +567,12 @@ div#navmenuright {
 /* Admin SideMenu styling - End */
 
 
+/* Identity login, register forms styling*/
+.field-validation-error {
+    color: red;
+    font-weight: bold;
+    background-color: black;
+}
 
 
 
@@ -464,4 +580,141 @@ div#navmenuright {
 
 
 
-/* Eric StyleSheet */
+/************** Blazor **************/
+
+.top-row {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.main {
+    flex: 1;
+}
+
+    .main .top-row {
+        background-color: #f7f7f7;
+        border-bottom: 1px solid #d6d5d5;
+        justify-content: flex-end;
+    }
+
+        .main .top-row > a, .main .top-row .btn-link {
+            white-space: nowrap;
+            margin-left: 1.5rem;
+        }
+
+        .main .top-row a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+.sidebar {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+    .sidebar .top-row {
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .sidebar .navbar-brand {
+        font-size: 1.1rem;
+    }
+
+    .sidebar .oi {
+        width: 2rem;
+        font-size: 1.1rem;
+        vertical-align: text-top;
+        top: -2px;
+    }
+
+    .sidebar .nav-item {
+        font-size: 0.9rem;
+        padding-bottom: 0.5rem;
+    }
+
+        .sidebar .nav-item:first-of-type {
+            padding-top: 1rem;
+        }
+
+        .sidebar .nav-item:last-of-type {
+            padding-bottom: 1rem;
+        }
+
+        .sidebar .nav-item a {
+            color: #d7d7d7;
+            border-radius: 4px;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            line-height: 3rem;
+        }
+
+            .sidebar .nav-item a.active {
+                background-color: rgba(255,255,255,0.25);
+                color: white;
+            }
+
+            .sidebar .nav-item a:hover {
+                background-color: rgba(255,255,255,0.1);
+                color: white;
+            }
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+
+/* ----------- Pics magnifier effect -------- */
+
+* {
+    box-sizing: border-box;
+}
+
+.img-magnifier-container {
+    position: relative;
+}
+
+.img-magnifier-glass {
+    position: absolute;
+    border: 3px solid #000;
+    border-radius: 2%;
+    cursor: none;
+    /*Set the size of the magnifier glass:*/
+    width: 200px;
+    height: 200px;
+}

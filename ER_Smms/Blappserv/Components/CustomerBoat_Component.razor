@@ -1,0 +1,231 @@
+﻿@using System.ComponentModel;
+@*@using Microsoft.AspNetCore.Components*@
+@using Microsoft.JSInterop
+
+<CascadingValue Value=@ViewModel Name="ViewModel">
+
+<div class="row border border-3 bg-secondary border-primary rounded-3 gx-0 p-1">
+
+    <div class="col-4 border border-1 bg-secondary border-primary rounded-3 gx-0 p-1">
+
+        @*<div>*@
+            @if (@ViewModel.CustomerAllInfo.BoatDatas != null)
+            {
+                @*<b><label asp-for="SelectedBoatDataId"></label></b>*@
+                <div>
+                @*<select @bind="@ViewModel.SelectedBoatDataId" >*@
+                <select asp-for="SelectedBoatslipId" @onchange="@SelectedBoat" >
+                    <option value="0" disabled selected>Välj Båt</option>
+
+                    @foreach (BoatDataDTO boat in @ViewModel.CustomerAllInfo.BoatDatas)
+                    {
+                        if(boat.Id == ViewModel.SelectedBoatDataId)
+                        { <option selected value="@boat.Id">@boat.Label</option> }
+                        else
+                        { <option value="@boat.Id">@boat.Label</option> }
+                    }
+
+                </select>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp; <button @onclick="Boatslipoverview">Båtplats Översikt</button>
+                </div>
+
+@*                <a href="../pictures/batplatsnumrering.png" ><b>Bild på båtplatser</b></a>*@
+
+                <br />
+
+    <div class="border border-1 bg-secondary border-primary rounded-3 p-1">
+
+    <div class="row gx-5">
+        <div>  @* Contain box *@
+            <div class="bg-dark text-light"> <b>&nbsp;Info för vald Båt:</b> </div>
+        </div> @* End Contain box*@
+            <div class="col-4">
+                Namn:  <br />
+                Längd(m): <br />
+                Bredd(m): <br />
+                Djup(m): <br />
+                Vikt(kg): <br />
+            </div>
+
+            <div class="col">
+
+                @{
+                    if (@ViewModel.BoatDTO != null)
+                    {
+                        
+                        <b>@ViewModel.BoatDTO.Label</b> <br />
+                        <b>@ViewModel.BoatDTO.Length</b> <br />
+                        <b>@ViewModel.BoatDTO.Width</b> <br />
+                        <b>@ViewModel.BoatDTO.Depth</b> <br />
+                        <b>@ViewModel.BoatDTO.Weight</b> <br />
+                    }
+                    else
+                    {
+                        <b id="selectedboatlabel">-</b> <br />
+                        <b id="selectedboatlength">-</b> <br />
+                        <b id="selectedboatwidth">-</b> <br />
+                        <b id="selectedboatdepth">-</b> <br />
+                        <b id="selectedboatweight">-</b> <br />
+                    }
+                }
+
+            </div>
+                    </div> @* End Row *@
+
+                </div> @* End BorderDiv *@
+
+
+            }
+            else
+            {
+                <p>Kund har ingen båtinfo lagrad...</p>
+            }
+
+        @*</div>*@ @* End -BorderStyle *@
+
+    </div> @* customerinfo Column*@
+
+    <div class="col-4 border border-1 bg-secondary border-primary rounded-3 gx-0 p-1">
+        <CustomerBoat_Boatslip_Component />
+    </div> @* boatinfo Column*@
+
+    <div class="col-4 border border-1 bg-secondary border-primary rounded-3 gx-0 p-1">
+        <CustomerBoat_Winterspot_Component />
+    </div> @* winterspotinfo Column*@
+
+
+</div> @* row for columns (i have 3 here) *@
+
+
+</CascadingValue>
+
+ @if (BsowShowPopup)
+    {
+
+        <!-- This is the popup -->
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="bg-light modal-title">Båtplats Översikt</h3>
+
+                        <!-- Button to close the popup -->
+                <button type="button" class="close"
+                        @onclick="BsowClosePopup">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                    </div>
+
+                    <!-- body -->
+            <div class="modal-body">
+                <div class="img-magnifier-container">
+                    <img src="../pictures/batplatsnumrering.png" id="boatslipoverview" width="900" />
+                </div>
+                        <br />
+                        <br />
+
+                        <!-- Button to close popup -->
+                <button class="btn btn-success"
+                        @onclick="BsowClosePopup">
+                            Stäng
+                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button id="magnifybtn_bsow" class="btn btn-success"
+                        @onclick="MagnifyGlassBtn">
+                            <b class="fa-solid fa-magnifying-glass"></b> @MagnifyBtnText
+                        </button>&nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+@code {
+
+    [CascadingParameter(Name = "ViewModel")]
+    IBManageCustomerViewModel ViewModel { get; set; }
+
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+
+    bool BsowShowPopup = false;
+    bool BsowMagnifyButton = false;
+
+    private string MagnifyBtnText { get; set; } = "Sätt PÅ";
+
+    void SelectedBoat(ChangeEventArgs e)
+    {
+        int theID = Convert.ToInt32(e.Value);
+        ViewModel.BoatDTO = ViewModel.CustomerAllInfo.BoatDatas.Where(i => i.Id == theID).FirstOrDefault();
+        ViewModel.SelectedBoatDataId = theID;
+
+        if (e.Value != null)
+        {
+            // "reset" the selected Boatslip and Winterspot when u change boat
+            ViewModel.SelectedBoatslipId = 0;
+            ViewModel.SelectedWinterstoreSpotId = 0;
+        }
+    }
+
+
+    void Boatslipoverview()
+    {
+        BsowShowPopup = true;
+    }
+
+    async Task MagnifyGlassBtn()
+    {
+        if(!BsowMagnifyButton)
+        {
+            // Specify javafunction. and in this case magnify, then id of the image, and the strength of the magnifier glass: 
+            await JSRuntime.InvokeVoidAsync("magnify", "boatslipoverview", 2);
+            BsowMagnifyButton = true;
+            MagnifyBtnText = "Stäng AV";
+            //await JSRuntime.InvokeVoidAsync("setElementInnerHtml", "magnifybtn_bsow", "Förstoring AV");
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("zoomOut"); // it stops magnify
+            BsowMagnifyButton = false;
+            MagnifyBtnText = "Sätt PÅ";
+            //await JSRuntime.InvokeVoidAsync("setElementInnerHtml", "magnifybtn_bsow", "Förstoring PÅ");
+        }
+    }
+
+
+    void BsowClosePopup()
+    {
+        // Close the Popup
+        BsowShowPopup = false;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel.PropertyChanged += async (sender, e) => {
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        };
+        await base.OnInitializedAsync();
+    }
+
+
+    async void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedHandler;
+    }
+
+}
+
+
